@@ -413,7 +413,7 @@ const Home = () => {
                 rows={5}
                 value={writingAdvice[progress - 1]}
                 onChange={handleInputLimit}
-                className="w-full text-sm px-2 py-1 border-black border-2 cursor-pointer"
+                className={showAdvice ? `w-full px-2 py-1 border-black border-2 mt-6`:`w-full px-2 py-1 border-black border-2`}
                 readOnly
                 onClick={popUpAdvice}
                 />
@@ -456,16 +456,14 @@ const Home = () => {
                 maxLength={maxInput}
                 value={formData[`Question_${currentStep}`] || ""}
                 onChange={handleInputLimit}
-                className="w-full px-2 py-1 border-black border-2"
+                className={showAdvice ? `w-full px-2 py-1 border-black border-2 mt-6`:`w-full px-2 py-1 border-black border-2`}
                 placeholder="..."
                 name={`Question_${questions[currentStep]}`}
                 />
             </div>
           )}
            {showAdvice && (
-            <div className="grid z-50">
-                <div className="fixed inset-0 flex justify-center items-center">
-                <div className="relative p-4 bg-white border-black border w-72 h-80 overflow-y-auto -mt-56">
+                <div className="p-4 bg-white border-black border w-72 h-80 overflow-y-auto absolute top-1 ml-4 mt-1">
 
                     <p className="text-sm text-gray-600 text-justify">{writingAdvice[progress - 1]}</p>
                     <button
@@ -475,8 +473,6 @@ const Home = () => {
                     アドバイスを閉じる
                     </button>
                 </div>
-                </div>
-            </div>
             )}
             {progress === 9 && (
                 <div className="relative bg-white p-4 max-w-sm mx-auto ">
