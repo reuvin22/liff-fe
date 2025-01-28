@@ -24,8 +24,8 @@ const Home = () => {
     const [prompt, setPrompt] = useState("")
     const [questionList, setQuestionList] = useState([])
     const [writingAdvice, setWritingAdvice] = useState([])
+    const previousDistance = useRef(0);
     const [zoom, setZoom] = useState(1);
-    
     console.log(progress)
     const maxInput = 100;
     const [formData, setFormData] = useState({
@@ -44,14 +44,6 @@ const Home = () => {
         Question_11: '',
     });
     const [userId, setUserId] = useState(null);
-
-    const handleZoomIn = () => {
-      setZoom(prevZoom => Math.min(prevZoom + 0.1, 2));  // Zoom in with a maximum limit of 2x
-    };
-  
-    const handleZoomOut = () => {
-      setZoom(prevZoom => Math.max(prevZoom - 0.1, 1));  // Zoom out with a minimum limit of 1x
-    };
 
     const options = [
         "営業力",
@@ -160,7 +152,7 @@ const Home = () => {
     useEffect(() => {
       const fetchQuestions = async () => {
         try {
-          const response = await axios.get("https://reuvindevs.com/liff/public/api/questions");
+          const response = await axios.get("http://127.0.0.1:8000/api/questions");
           setQuestionList(response.data.questions);
           setWritingAdvice(response.data.writing_advice);
           console.log(questionList)
@@ -234,6 +226,29 @@ const Home = () => {
       loadLIFF();
     }, []);
   
+    const handleTouchMove = (event) => {
+      if (event.touches.length === 2) {
+        const touch1 = event.touches[0];
+        const touch2 = event.touches[1];
+        const currentDistance = Math.sqrt(
+          (touch2.pageX - touch1.pageX) ** 2 + (touch2.pageY - touch1.pageY) ** 2
+        );
+  
+        if (previousDistance.current === 0) {
+          previousDistance.current = currentDistance;
+        } else {
+          const zoomFactor = currentDistance / previousDistance.current;
+          setZoom((prevZoom) => Math.min(Math.max(prevZoom * zoomFactor, 1), 2)); // Limit zoom between 1x and 2x
+          previousDistance.current = currentDistance;
+        }
+      }
+    };
+  
+    // Reset zoom after touch ends
+    const handleTouchEnd = () => {
+      previousDistance.current = 0;
+    };
+
     useEffect(() => {
       if (userId) {
         setFormData(prevData => ({
@@ -249,7 +264,7 @@ const Home = () => {
       
       try {
           const postResponse = await axios.post(
-              "https://reuvindevs.com/liff/public/api/answers",
+              "http://127.0.0.1:8000/api/answers",
               formData,
               {
                   headers: {
@@ -401,15 +416,23 @@ const Home = () => {
   
           {showAdditionalDiv && selectedOption && (
             <div>
-              <div className="bg-gray-300 w-72 ml-4 border-black border-2 py-1 px-4 mb-2">
-                <p className="text-sm">能力の説明</p>
-              </div>
-              <div className="p-4 bg-gray-100 border-black border-2 w-72 ml-4 overflow-y-auto min-h-40 max-h-40">
-                  <p className="text-sm text-gray-600 text-justify">
-                  {showAdditionalInfo[options.indexOf(selectedOption)]}
-                  </p>
-              </div>
+            <div className="bg-gray-300 w-72 ml-4 border-black border-2 py-1 px-4 mb-2">
+              <p className="text-sm">能力の説明</p>
             </div>
+            <div
+              className="p-4 bg-gray-100 border-black border-2 w-72 ml-4 overflow-y-auto min-h-64 max-h-72"
+              style={{
+                transform: `scale(${zoom})`,
+                transition: "transform 0.3s ease",
+              }}
+              onTouchMove={handleTouchMove} // Enable zoom on pinch
+              onTouchEnd={handleTouchEnd} // Reset zoom after pinch ends
+            >
+              <p className="text-sm text-gray-600 text-justify">
+                {showAdditionalInfo[options.indexOf(selectedOption)]}
+              </p>
+            </div>
+          </div>
             )}
         
           {progress >= 3 && progress <= 8 && (
@@ -474,27 +497,23 @@ const Home = () => {
           )}
            {showAdvice && (
             <div className="grid z-50">
-            <div className="fixed inset-0 flex justify-center items-center">
-              <div
-                className="relative p-4 bg-white border-black border w-[300px] h-[380px] overflow-y-auto"
-              >
-                <p className="text-sm text-gray-600 text-justify"
-                  style={{ transform: `scale(${zoom})`, transition: "transform 0.3s ease" }}
-                  onClick={handleZoomIn}
-                >{writingAdvice[progress - 1]}</p>
-                <button
-                  onClick={popUpAdvice}
-                  className="bg-slate-400 text-gray-600 px-4 py-2 shadow absolute bottom-4 left-1/2 transform -translate-x-1/2 w-full mt-11"
-                >
-                  アドバイスを閉じる
-                </button>
-              </div>
+                <div className="fixed inset-0 flex justify-center items-center">
+                <div className="relative p-4 bg-white border-black border w-[300px] h-[380px] overflow-y-auto">
+
+                    <p className="text-sm text-gray-600 text-justify">{writingAdvice[progress - 1]}</p>
+                    <button
+                    onClick={popUpAdvice}
+                    className="bg-slate-400 text-gray-600 px-4 py-2 shadow absolute bottom-4 left-1/2 transform -translate-x-1/2 w-full mt-11"
+                    >
+                    アドバイスを閉じる
+                    </button>
+                </div>
+                </div>
             </div>
-          </div>
             )}
             {progress === 9 && (
                 <div className="relative bg-white p-4 max-w-sm mx-auto ">
-                <div className="mb-1">
+                <div className="-mt-6">
                 <input
                 type="text"
                 maxLength={maxInput}
@@ -509,7 +528,7 @@ const Home = () => {
             )}
             {progress === 10 && (
                 <div className="relative bg-white p-4 max-w-sm mx-auto">
-                <div className="mb-1">
+                <div className="-mt-6">
                 <input
                 type="text"
                 maxLength={maxInput}

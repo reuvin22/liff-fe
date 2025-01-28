@@ -18,7 +18,7 @@ function Generate({prompt, userId}) {
     const handleCompress = () => {
         setIsLoading(true)
         axios.get(
-            `https://reuvindevs.com/liff/public/api/compress/${userId}`
+            `http://127.0.0.1:8000/api/compress/${userId}`
         ).then((response) => {
             setCompressData(response.data)
             setIsCompress(true)
@@ -31,7 +31,7 @@ function Generate({prompt, userId}) {
     const handleGenerate = () => {
         setIsLoading(true)
         axios.get(
-            `https://reuvindevs.com/liff/public/api/generate/${userId}`
+            `http://127.0.0.1:8000/api/generate/${userId}`
         ).then((response) => {
             setGenerate(response.data)
             setIsLoading(false)
