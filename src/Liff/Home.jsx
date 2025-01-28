@@ -465,7 +465,7 @@ const Home = () => {
            {showAdvice && (
             <div className="grid z-50">
                 <div className="fixed inset-0 flex justify-center items-center">
-                <div className="relative p-4 bg-white border-black border w-[300px] h-[380px] overflow-y-auto">
+                <div className="relative p-4 bg-white border-black border w-72 h-80 overflow-y-auto -mt-56">
 
                     <p className="text-sm text-gray-600 text-justify">{writingAdvice[progress - 1]}</p>
                     <button
