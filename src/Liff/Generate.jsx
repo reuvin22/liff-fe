@@ -84,7 +84,7 @@ function Generate({prompt, userId}) {
                 </div>
                 <div
                 onClick={handleCopy}
-                className="min-h-96 max-h-72 border-2 border-black bg-white mb-2 overflow-auto overflow-x-hidden"
+                className="min-h-96 max-h-96 border-2 border-black bg-white mb-2 overflow-auto overflow-x-hidden"
                 >
                     {copy && (
                         <div className='w-full bg-red-200 h-10 justify-center text-center leading-[2.5rem] z-50'>{copyStatus}</div>

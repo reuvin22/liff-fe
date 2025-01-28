@@ -3,11 +3,12 @@ import Home from './Liff/Home'
 import Generate from './Liff/Generate'
 import Explanation from './Liff/Explanation'
 import LoadingError from './Liff/LoadingError'
+import Compress from './Liff/Compress'
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Generate />} />
+        <Route path="/" element={<Compress />} />
         <Route path='/explanation' element={<Explanation />} />
       </Routes>
     </>
