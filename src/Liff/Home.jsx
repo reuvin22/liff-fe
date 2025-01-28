@@ -413,7 +413,7 @@ const Home = () => {
                 rows={5}
                 value={writingAdvice[progress - 1]}
                 onChange={handleInputLimit}
-                className={showAdvice ? `w-full px-2 py-1 border-black border-2 mt-6`:`w-full px-2 py-1 border-black border-2`}
+                className={showAdvice ? `w-full px-2 py-1 border-black border-2 mt-3`:`w-full px-2 py-1 border-black border-2`}
                 readOnly
                 onClick={popUpAdvice}
                 />
