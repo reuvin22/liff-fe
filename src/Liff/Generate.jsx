@@ -76,6 +76,18 @@ function Generate({prompt, userId}) {
     if(home){
         return <Home />
     }
+
+    const formatContent = (text) => {
+        if (language === 'ja') {
+            return text.split('。').map((sentence, index) => (
+                <p key={index} className="text-sm px-2 text-justify">{sentence.trim() + '。'}</p>
+            ));
+        } else {
+            return text.split('\n').map((line, index) => (
+                <p key={index} className="text-sm px-2 text-justify">{line}</p>
+            ));
+        }
+    };
     return (
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
                 <div className="bg-white w-80 rounded-lg shadow-lg p-4 text-center">
@@ -89,7 +101,7 @@ function Generate({prompt, userId}) {
                     {copy && (
                         <div className='w-full bg-red-200 h-10 justify-center text-center leading-[2.5rem] z-50'>{copyStatus}</div>
                     )}
-                    <p className='text-sm px-2 text-justify'>{generate ? generate : prompt}</p>
+                    <p className='text-sm px-2 text-justify'>{generate ? formatContent(generate) : formatContent(prompt)}</p>
                 </div>
                 <div className="flex space-x-2">
                 <button onClick={handleCompress} className="bg-orange-400 text-white px-4 border flex-1 text-sm">
