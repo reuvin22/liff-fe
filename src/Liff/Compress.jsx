@@ -27,7 +27,7 @@ function Compress({prompt, userId}) {
     const handleGenerate = () => {
         setIsLoading(true)
         axios.get(
-            `http://127.0.0.1:8000/api/generate/${userId}`
+            `https://reuvindevs.com/liff/public/api/generate/${userId}`
         ).then((response) => {
             setGenerate(response.data)
             setIsGeneratePage(true)

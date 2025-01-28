@@ -24,8 +24,6 @@ const Home = () => {
     const [prompt, setPrompt] = useState("")
     const [questionList, setQuestionList] = useState([])
     const [writingAdvice, setWritingAdvice] = useState([])
-    const previousDistance = useRef(0);
-    const [zoom, setZoom] = useState(1);
     console.log(progress)
     const maxInput = 100;
     const [formData, setFormData] = useState({
@@ -152,7 +150,7 @@ const Home = () => {
     useEffect(() => {
       const fetchQuestions = async () => {
         try {
-          const response = await axios.get("http://127.0.0.1:8000/api/questions");
+          const response = await axios.get("https://reuvindevs.com/liff/public/api/questions");
           setQuestionList(response.data.questions);
           setWritingAdvice(response.data.writing_advice);
           console.log(questionList)
@@ -226,29 +224,6 @@ const Home = () => {
       loadLIFF();
     }, []);
   
-    const handleTouchMove = (event) => {
-      if (event.touches.length === 2) {
-        const touch1 = event.touches[0];
-        const touch2 = event.touches[1];
-        const currentDistance = Math.sqrt(
-          (touch2.pageX - touch1.pageX) ** 2 + (touch2.pageY - touch1.pageY) ** 2
-        );
-  
-        if (previousDistance.current === 0) {
-          previousDistance.current = currentDistance;
-        } else {
-          const zoomFactor = currentDistance / previousDistance.current;
-          setZoom((prevZoom) => Math.min(Math.max(prevZoom * zoomFactor, 1), 2)); // Limit zoom between 1x and 2x
-          previousDistance.current = currentDistance;
-        }
-      }
-    };
-  
-    // Reset zoom after touch ends
-    const handleTouchEnd = () => {
-      previousDistance.current = 0;
-    };
-
     useEffect(() => {
       if (userId) {
         setFormData(prevData => ({
@@ -264,7 +239,7 @@ const Home = () => {
       
       try {
           const postResponse = await axios.post(
-              "http://127.0.0.1:8000/api/answers",
+              "https://reuvindevs.com/liff/public/api/answers",
               formData,
               {
                   headers: {
@@ -416,23 +391,15 @@ const Home = () => {
   
           {showAdditionalDiv && selectedOption && (
             <div>
-            <div className="bg-gray-300 w-72 ml-4 border-black border-2 py-1 px-4 mb-2">
-              <p className="text-sm">能力の説明</p>
+              <div className="bg-gray-300 w-72 ml-4 border-black border-2 py-1 px-4 mb-2">
+                <p className="text-sm">能力の説明</p>
+              </div>
+              <div className="p-4 bg-gray-100 border-black border-2 w-72 ml-4 overflow-y-auto min-h-64 max-h-72">
+                  <p className="text-sm text-gray-600 text-justify">
+                  {showAdditionalInfo[options.indexOf(selectedOption)]}
+                  </p>
+              </div>
             </div>
-            <div
-              className="p-4 bg-gray-100 border-black border-2 w-72 ml-4 overflow-y-auto min-h-64 max-h-72"
-              style={{
-                transform: `scale(${zoom})`,
-                transition: "transform 0.3s ease",
-              }}
-              onTouchMove={handleTouchMove} // Enable zoom on pinch
-              onTouchEnd={handleTouchEnd} // Reset zoom after pinch ends
-            >
-              <p className="text-sm text-gray-600 text-justify">
-                {showAdditionalInfo[options.indexOf(selectedOption)]}
-              </p>
-            </div>
-          </div>
             )}
         
           {progress >= 3 && progress <= 8 && (
