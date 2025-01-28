@@ -18,7 +18,7 @@ function Generate({prompt, userId}) {
     const handleCompress = () => {
         setIsLoading(true)
         axios.get(
-            `http://127.0.0.1:8000/api/compress/${userId}`
+            `https://reuvindevs.com/liff/public/api/compress/${userId}`
         ).then((response) => {
             setCompressData(response.data)
             setIsCompress(true)
@@ -31,7 +31,7 @@ function Generate({prompt, userId}) {
     const handleGenerate = () => {
         setIsLoading(true)
         axios.get(
-            `http://127.0.0.1:8000/api/generate/${userId}`
+            `https://reuvindevs.com/liff/public/api/generate/${userId}`
         ).then((response) => {
             setGenerate(response.data)
             setIsLoading(false)
@@ -84,7 +84,7 @@ function Generate({prompt, userId}) {
                 </div>
                 <div
                 onClick={handleCopy}
-                className="min-h-72 max-h-72 border-2 border-black bg-white mb-2 overflow-auto overflow-x-hidden"
+                className="min-h-96 max-h-72 border-2 border-black bg-white mb-2 overflow-auto overflow-x-hidden"
                 >
                     {copy && (
                         <div className='w-full bg-red-200 h-10 justify-center text-center leading-[2.5rem] z-50'>{copyStatus}</div>
