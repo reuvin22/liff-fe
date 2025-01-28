@@ -24,6 +24,8 @@ const Home = () => {
     const [prompt, setPrompt] = useState("")
     const [questionList, setQuestionList] = useState([])
     const [writingAdvice, setWritingAdvice] = useState([])
+    const [zoom, setZoom] = useState(1);
+    
     console.log(progress)
     const maxInput = 100;
     const [formData, setFormData] = useState({
@@ -42,6 +44,14 @@ const Home = () => {
         Question_11: '',
     });
     const [userId, setUserId] = useState(null);
+
+    const handleZoomIn = () => {
+      setZoom(prevZoom => Math.min(prevZoom + 0.1, 2));  // Zoom in with a maximum limit of 2x
+    };
+  
+    const handleZoomOut = () => {
+      setZoom(prevZoom => Math.max(prevZoom - 0.1, 1));  // Zoom out with a minimum limit of 1x
+    };
 
     const options = [
         "営業力",
@@ -413,7 +423,7 @@ const Home = () => {
                 rows={5}
                 value={writingAdvice[progress - 1]}
                 onChange={handleInputLimit}
-                className="w-full text-sm px-2 py-1 border-black border-2 cursor-pointer hover:scale-125 transition-transform duration-300 ease-in-out"
+                className="w-full text-sm px-2 py-1 border-black border-2 cursor-pointer"
                 readOnly
                 onClick={popUpAdvice}
                 />
@@ -464,19 +474,33 @@ const Home = () => {
           )}
            {showAdvice && (
             <div className="grid z-50">
-                <div className="fixed inset-0 flex justify-center items-center">
-                <div className="relative p-4 bg-white border-black border w-[300px] h-[380px] overflow-y-auto">
-
-                    <p className="text-sm text-gray-600 text-justify">{writingAdvice[progress - 1]}</p>
-                    <button
-                    onClick={popUpAdvice}
-                    className="bg-slate-400 text-gray-600 px-4 py-2 shadow absolute bottom-4 left-1/2 transform -translate-x-1/2 w-full mt-11"
-                    >
-                    アドバイスを閉じる
-                    </button>
-                </div>
-                </div>
+            <div className="fixed inset-0 flex justify-center items-center">
+              <div
+                className="relative p-4 bg-white border-black border w-[300px] h-[380px] overflow-y-auto"
+                style={{ transform: `scale(${zoom})`, transition: "transform 0.3s ease" }}
+              >
+                <p className="text-sm text-gray-600 text-justify">{writingAdvice[progress - 1]}</p>
+                <button
+                  onClick={handleZoomIn}
+                  className="bg-slate-400 text-gray-600 px-4 py-2 shadow absolute top-4 left-1/2 transform -translate-x-1/2"
+                >
+                  Zoom In
+                </button>
+                <button
+                  onClick={handleZoomOut}
+                  className="bg-slate-400 text-gray-600 px-4 py-2 shadow absolute top-12 left-1/2 transform -translate-x-1/2"
+                >
+                  Zoom Out
+                </button>
+                <button
+                  onClick={popUpAdvice}
+                  className="bg-slate-400 text-gray-600 px-4 py-2 shadow absolute bottom-4 left-1/2 transform -translate-x-1/2 w-full mt-11"
+                >
+                  アドバイスを閉じる
+                </button>
+              </div>
             </div>
+          </div>
             )}
             {progress === 9 && (
                 <div className="relative bg-white p-4 max-w-sm mx-auto ">
