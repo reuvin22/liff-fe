@@ -25,7 +25,7 @@ const Home = () => {
     const [questionList, setQuestionList] = useState([])
     const [writingAdvice, setWritingAdvice] = useState([])
     const [zoom, setZoom] = useState(1);
-
+    
     console.log(progress)
     const maxInput = 100;
     const [formData, setFormData] = useState({
@@ -479,7 +479,8 @@ const Home = () => {
                 className="relative p-4 bg-white border-black border w-[300px] h-[380px] overflow-y-auto"
               >
                 <p className="text-sm text-gray-600 text-justify"
-                style={{ transform: `scale(${zoom})`, transition: "transform 0.3s ease" }}
+                  style={{ transform: `scale(${zoom})`, transition: "transform 0.3s ease" }}
+                  onClick={handleZoomIn}
                 >{writingAdvice[progress - 1]}</p>
                 <button
                   onClick={popUpAdvice}
