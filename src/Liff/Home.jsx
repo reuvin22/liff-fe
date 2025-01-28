@@ -413,7 +413,7 @@ const Home = () => {
                 rows={5}
                 value={writingAdvice[progress - 1]}
                 onChange={handleInputLimit}
-                className={showAdvice ? `w-full px-2 py-1 border-black border-2 mt-1`:`w-full px-2 py-1 border-black border-2`}
+                className={showAdvice ? `w-full px-2 py-1 border-black border-2 mt-4`:`w-full px-2 py-1 border-black border-2`}
                 readOnly
                 onClick={popUpAdvice}
                 />
@@ -456,7 +456,7 @@ const Home = () => {
                 maxLength={maxInput}
                 value={formData[`Question_${currentStep}`] || ""}
                 onChange={handleInputLimit}
-                className={showAdvice ? `w-full px-2 py-1 border-black border-2 mt-5`:`w-full px-2 py-1 border-black border-2`}
+                className={showAdvice ? `w-full px-2 py-1 border-black border-2 mt-4`:`w-full px-2 py-1 border-black border-2`}
                 placeholder="..."
                 name={`Question_${questions[currentStep]}`}
                 />
