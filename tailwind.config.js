@@ -5,8 +5,13 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        'xs': '480px' <= '639px',
+        'sm': '640px' <= '769px',
+        'md': '768px',
+      },
+    },
   },
   plugins: [],
 }
-
