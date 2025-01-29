@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Loading from './Loading';
 import Compress from './Compress';
@@ -13,7 +12,6 @@ function Generate({prompt, userId}) {
     const [compressData, setCompressData] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [home, setHome] = useState(false)
-    const navigate = useNavigate()
     const [copy, setCopy] = useState(false)
     const handleCompress = () => {
         setIsLoading(true)

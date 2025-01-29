@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ArrowB from "../assets/arrow.png";
-import { data, useNavigate } from "react-router-dom";
 import axios from "axios";
 import liff from "@line/liff";
 import Loading from "./Loading";
@@ -18,7 +17,6 @@ const Home = () => {
     const [selectedOption, setSelectedOption] = useState("");
     const [currentInput, setCurrentInput] = useState("");
     const [showAdvice, setShowAdvice] = useState(false);
-    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false)
     const [optionComponent, setOptionComponent] = useState(false)
     const [prompt, setPrompt] = useState("")

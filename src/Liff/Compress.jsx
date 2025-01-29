@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Loading from './Loading';
 import Generate from './Generate';
@@ -15,7 +14,6 @@ function Compress({prompt, userId}) {
     const [compressData, setCompressData] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [copy, setCopy] = useState(false)
-    const navigate = useNavigate()
 
     function backToHome() {
         if (liff.isInClient()) {
