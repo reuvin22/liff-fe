@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import Generate from './Generate';
 import axios from 'axios';
+import ConvertDownload from './ConvertDownload';
+import { useNavigate } from 'react-router-dom';
 
 function Option({ prompt, userId }) {
   const [isGenerate, setIsGenerate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [generate, setGenerate] = useState("");
-
+  const navigate = useNavigate()
   const handleGenerate = () => {
     if (!prompt) {
       console.log('PROMPT IS EMPTY');
@@ -63,7 +65,7 @@ function Option({ prompt, userId }) {
             {isLoading ? (
               <div className="w-7 h-7 border-4 border-t-4 border-white border-solid rounded-full animate-spin"></div>
             ) : (
-              'テキストファイル'
+              navigate('/convert')
             )}
           </button>
         </div>
