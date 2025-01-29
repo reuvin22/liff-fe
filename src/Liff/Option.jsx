@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Generate from './Generate';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import ConvertDownload from './ConvertDownload';
 
 function Option({ prompt, userId }) {
@@ -19,27 +18,24 @@ function Option({ prompt, userId }) {
     }
   };
 
-  const handleConvert = () => {
-    setIsLoading(true);
-    axios
-      .get(`https://reuvindevs.com/liff/public/api/convert/${userId}`)
-      .then((response) => {
-        const fileUrl = response.data;
-        if (fileUrl) {
-          <ConvertDownload 
-            userId={userId}
-            fileUrl={fileUrl}
-          />
-        } else {
-          console.error('File URL is not available');
-        }
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error generating the file URL", error);
-        setIsLoading(false);
-      });
-  };
+    const handleConvert = () => {
+      setIsLoading(true);
+      axios
+        .post(`https://reuvindevs.com/liff/public/api/convert/${userId}`)
+        .then((response) => {
+          const fileUrl = response.data.fileUrl;
+          if (fileUrl) {
+            window.open(fileUrl, '_blank');
+          } else {
+            console.error('File URL is not available');
+          }
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error generating the file URL", error);
+          setIsLoading(false);
+        });
+    };
 
   if (isGenerate) {
     return <Generate 

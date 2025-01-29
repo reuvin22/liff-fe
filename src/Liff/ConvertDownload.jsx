@@ -8,7 +8,7 @@ function ConvertDownload({ userId, fileUrl }) {
         const fetchDownloadLink = async () => {
             try {
                 const response = await axios.post(`https://reuvindevs.com/liff/public/api/convert/${userId}`)
-                setLink(response.data.downloadLink)
+                setLink(response.data)
             } catch (error) {
                 console.error("Error fetching download link:", error)
             }
