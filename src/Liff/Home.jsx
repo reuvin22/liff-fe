@@ -323,7 +323,7 @@ const Home = () => {
             setProgress(progress + 1);
         }
 
-        setShowAdvice(!showAdvice)
+        setShowAdvice(false)
     };    
       
     const prevQuestion = () => {
@@ -336,7 +336,7 @@ const Home = () => {
         setShowAdditionalDiv(false);
         setCurrentInput(formData[`Question_${currentStep - 1}`] || '');
       }
-      setShowAdvice(!showAdvice)
+      setShowAdvice(false)
     };
 
     console.log('FORMDATA: ', formData)

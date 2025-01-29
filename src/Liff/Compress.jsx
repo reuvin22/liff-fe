@@ -62,6 +62,10 @@ function Compress({prompt, userId}) {
           }, 2000)
         };
 
+        const formatJapaneseText = (text) => {
+            return text.replace(/。/g, "。\n");
+        };
+
     return (
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
                 <div className="bg-white w-80 rounded-lg shadow-lg p-4 text-center relative">
@@ -75,7 +79,7 @@ function Compress({prompt, userId}) {
                     {copy && (
                         <div className='w-full bg-red-200 h-10 justify-center text-center leading-[2.5rem] z-50'>{copyStatus}</div>
                     )}
-                    <p className='text-sm px-2 text-justify'>{compressData ? compressData : prompt}</p>
+                    <p className='text-sm px-2 whitespace-pre-line'>{compressData ? formatJapaneseText(compressData) : formatJapaneseText(prompt)}</p>
                 </div>
                 <div className="flex space-x-2">
                 <button onClick={backToHome} className="bg-gray-400 text-white px-4 border flex-1 text-sm">

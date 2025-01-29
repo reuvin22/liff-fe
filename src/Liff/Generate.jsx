@@ -94,7 +94,7 @@ function Generate({prompt, userId}) {
                     {copy && (
                         <div className='w-full bg-red-200 h-10 justify-center text-center leading-[2.5rem] z-50'>{copyStatus}</div>
                     )}
-                    <p className='text-sm px-2 text-justify whitespace-pre-line'>{generate ? formatJapaneseText(generate) : formatJapaneseText(prompt)}</p>
+                    <p className='text-sm px-2 whitespace-pre-line'>{generate ? formatJapaneseText(generate) : formatJapaneseText(prompt)}</p>
                 </div>
                 <div className="flex space-x-2">
                 <button onClick={handleCompress} className="bg-orange-400 text-white px-4 border flex-1 text-sm">
