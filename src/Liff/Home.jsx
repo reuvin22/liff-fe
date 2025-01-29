@@ -369,10 +369,12 @@ const Home = () => {
             <span className="text-gray-600 text-sm font-medium">{`${currentStep} / ${totalSteps}`}</span>
           </div>
   
-          <div className="p-4 text-center">
-            <p className="text-sm font-medium text-gray-700 mb-1 bg-slate-300 px-10 py-2">
-              {questionList[currentStep - 1]}
-            </p>
+          <div className="p-4">
+            <div className="text-sm font-medium text-gray-700 mb-1 bg-slate-300 px-2 py-2">
+              <ul className="list-disc pl-5">
+                <li className="text-left">{questionList[currentStep - 1]}</li>
+              </ul>
+            </div>
   
             {(progress === 1 || progress === 2) ? (
             <div className="relative">
@@ -405,36 +407,38 @@ const Home = () => {
             </div>
             )}
         
-          {progress >= 3 && progress <= 8 && (
-            <div className="relative bg-white p-4 max-w-sm mx-auto -mt-5">
-              <label className="block text-gray-600 text-sm mb-1">
-                書き方のアドバイス
-              </label>
-              <textarea
-                type="text"
-                maxLength={maxInput}
-                rows={5}
-                value={writingAdvice[progress - 1]}
-                onChange={handleInputLimit}
-                className={showAdvice ? `w-full px-2 py-1 border-black border-2 mt-4`:`w-full px-2 py-1 border-black border-2`}
-                readOnly
-                onClick={popUpAdvice}
-                />
-              <p className="text-xs text-right text-gray-500 mt-1">
+        {progress >= 3 && progress <= 8 && (
+          <div className="relative bg-white p-4 max-w-sm mx-auto">
+            <label className="block text-gray-600 text-sm mb-1">
+              書き方のアドバイス
+            </label>
+            <textarea
+              type="text"
+              maxLength={maxInput}
+              rows={5}
+              value={writingAdvice[progress - 1]}
+              onChange={handleInputLimit}
+              className={`w-full px-2 py-1 border-black border-2 ${showAdvice && progress >= 4 && progress <= 8 ? "mt-4" : ""} ${currentStep === 6 ? "mt-6" : ""}`}
+              readOnly
+              onClick={popUpAdvice}
+            />
+            <p
+              className={`text-xs text-right text-gray-500 ${showAdvice && progress >= 4 && progress <= 8 ? "mt-3" : "mt-1"} ${currentStep === 6 ? "mt-6" : ""}`}
+            >
               入力文字数: {currentInput.length} / {maxInput}
             </p>
             <textarea
-                type="text"
-                maxLength={maxInput}
-                value={formData[`Question_${currentStep}`] || ""}
-                onChange={handleInputLimit}
-                className="w-full px-2 py-1 border-black border-2"
-                placeholder="..."
-                rows={6}
-                name={`Question_${questions[currentStep]}`}
-                />
-            </div>
-          )}
+              type="text"
+              maxLength={maxInput}
+              value={formData[`Question_${currentStep}`] || ""}
+              onChange={handleInputLimit}
+              className="w-full px-2 py-1 border-black border-2"
+              placeholder="..."
+              rows={6}
+              name={`Question_${questions[currentStep]}`}
+            />
+          </div>
+        )}
             {progress === 11 && (
                 <div className="relative bg-white p-4 max-w-sm mx-auto -mt-5">
                 <label className="block text-gray-600 text-sm mb-1">
@@ -450,7 +454,9 @@ const Home = () => {
                 readOnly
                 onClick={popUpAdvice}
                 />
-                <p className="text-xs text-right text-gray-500 mt-1">
+                <p className={showAdvice && progress === 11 ? `text-xs text-right text-gray-500 mt-7` :
+                  `text-xs text-right text-gray-500 mt-1`
+                }>
                 入力文字数: {currentInput.length} / {maxInput}
             </p>
             <textarea
@@ -459,7 +465,7 @@ const Home = () => {
                 maxLength={maxInput}
                 value={formData[`Question_${currentStep}`] || ""}
                 onChange={handleInputLimit}
-                className={showAdvice ? `w-full px-2 py-1 border-black border-2 mt-4`:`w-full px-2 py-1 border-black border-2`}
+                className={showAdvice && progress === 11 ? `w-full px-2 py-1 border-black border-2 mt-1`:`w-full px-2 py-1 border-black border-2`}
                 placeholder="..."
                 name={`Question_${questions[currentStep]}`}
                 />
