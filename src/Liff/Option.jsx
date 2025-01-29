@@ -17,7 +17,7 @@ function Option({ prompt, userId }) {
       setIsGenerate(true);
     }
   };
-
+  console.log('TEST USER ID: ', userId)
     const handleConvert = () => {
       setIsLoading(true);
       axios
@@ -38,6 +38,9 @@ function Option({ prompt, userId }) {
         });
     };
 
+  if(link){
+    return <ConvertDownload fileUrl={link}/>
+  }
   if (isGenerate) {
     return <Generate 
       prompt={generate} 
