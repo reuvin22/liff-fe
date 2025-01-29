@@ -454,7 +454,7 @@ const Home = () => {
               rows={5}
               value={writingAdvice[progress - 1]}
               onChange={handleInputLimit}
-              className={`sm:text-xsm md:text-sm lg:text-lg min-h-32 max-h-32 w-full px-2 py-1 border-black border-2 ${showAdvice && progress >= 4 && progress <= 8 ? "mt-4" : ""} ${currentStep === 6 ? "mt-6" : ""}`}
+              className={`sm:text-sm md:text-md lg:text-lg min-h-32 max-h-32 w-full px-2 py-1 border-black border-2 ${showAdvice && progress >= 4 && progress <= 8 ? "mt-4" : ""} ${currentStep === 6 ? "mt-6" : ""}`}
               readOnly
               onClick={popUpAdvice}
             />
