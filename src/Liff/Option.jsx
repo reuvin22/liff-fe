@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import Generate from './Generate';
 import axios from 'axios';
-import ConvertDownload from './ConvertDownload';
 import { useNavigate } from 'react-router-dom';
+import ConvertDownload from './ConvertDownload';
 
 function Option({ prompt, userId }) {
   const [isGenerate, setIsGenerate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [generate, setGenerate] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const handleGenerate = () => {
     if (!prompt) {
       console.log('PROMPT IS EMPTY');
@@ -25,7 +26,10 @@ function Option({ prompt, userId }) {
       .then((response) => {
         const fileUrl = response.data;
         if (fileUrl) {
-          window.open(fileUrl, '_blank');
+          <ConvertDownload 
+            userId={userId}
+            fileUrl={fileUrl}
+          />
         } else {
           console.error('File URL is not available');
         }
@@ -65,7 +69,7 @@ function Option({ prompt, userId }) {
             {isLoading ? (
               <div className="w-7 h-7 border-4 border-t-4 border-white border-solid rounded-full animate-spin"></div>
             ) : (
-              navigate('/convert')
+              '変換する'
             )}
           </button>
         </div>

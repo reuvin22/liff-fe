@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-function ConvertDownload({ userId }) {
+function ConvertDownload({ userId, fileUrl }) {
     const [link, setLink] = useState("")
 
-    // Fetch the download URL from your API
     useEffect(() => {
         const fetchDownloadLink = async () => {
             try {
