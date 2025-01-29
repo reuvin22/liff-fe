@@ -11,7 +11,7 @@ import HomeLoading from "./HomeLoading";
 const Home = () => {
     const [progress, setProgress] = useState(1);
     const [currentStep, setCurrentStep] = useState(1);
-    const [totalSteps] = useState(11);
+    const [totalSteps] = useState(14);
     const [isGenerate, setIsGenerate] = useState(false)
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [showAdditionalDiv, setShowAdditionalDiv] = useState(false);
@@ -25,9 +25,16 @@ const Home = () => {
     const [questionList, setQuestionList] = useState([])
     const [writingAdvice, setWritingAdvice] = useState([])
     console.log(progress)
-    const maxInput = 100;
+    const maxInput =
+    progress === 3 || progress === 4 || progress === 5
+      ? 100
+      : progress === 6 || progress === 8
+      ? 200
+      : progress === 7
+      ? 600
+      : 200;
     const [formData, setFormData] = useState({
-        userId: null,
+        userId: userId,
         displayName: '',
         Question_1: '',
         Question_2: '',
@@ -40,6 +47,9 @@ const Home = () => {
         Question_9: '',
         Question_10: '',
         Question_11: '',
+        Question_12: '',
+        Question_13: '',
+        Question_14: ''
     });
     const [userId, setUserId] = useState(null);
 
@@ -181,6 +191,9 @@ const Home = () => {
   （株式会社等の法人形態は省いてください）`,
         "志望している企業のＴＯＰページのアドレスを入力してください。",
         `志望企業の「ミッションや理念」をホームページから探してきて記入してください。`,
+        `あなたが魅力を感じる「企業理念・ビジョン・ミッション」「事業内容」「具体的な仕事内容」を記載してください。`,
+        `なぜその会社に魅力を感じるのか、自分自身の経験やその中で感じたこと、考えたことも含めて説明してください。`,
+        `2の理由と1の内容に整合性がない場合は、感情や考えを想定して理由だけを作成してください`
     ];
     
     useEffect(() => {
@@ -189,7 +202,7 @@ const Home = () => {
           const response = await axios.get("https://reuvindevs.com/liff/public/api/questions");
           setQuestionList(response.data.questions);
           setWritingAdvice(response.data.writing_advice);
-          console.log(questionList)
+          console.log('THIS IS QUESTION LIST: ', questionList)
           console.log(writingAdvice)
         } catch (error) {
           console.error("Error fetching questions:", error);
@@ -235,7 +248,7 @@ const Home = () => {
                       });
                   } else {
                     alert("User is not logged in. User ID not detected.");
-                    // liff.login();
+                    liff.login();
                   }
                 })
                 .catch((err) => {
@@ -347,7 +360,7 @@ const Home = () => {
             return;
         }
 
-        if(progress === 11){
+        if(progress === 14){
             handleSubmit()
             return;
         }
@@ -392,7 +405,7 @@ const Home = () => {
           </div>
   
           <div className="flex items-center justify-between px-4 py-2">
-            <div className="flex space-x-1 mt-8 -mb-4">
+            <div className="flex mt-8 -mb-4">
               {Array.from({ length: totalSteps }, (_, i) => (
                 <div
                   key={i}
@@ -450,7 +463,7 @@ const Home = () => {
             </label>
             <textarea
               type="text"
-              maxLength={maxInput}
+              maxLength={progress === 3 || progress === 4 || progress === 5 ? 100 : progress === 6 || progress === 8 ? 200 : progress === 7 ? 600 : 200 }
               rows={5}
               value={writingAdvice[progress - 1]}
               onChange={handleInputLimit}
@@ -461,7 +474,7 @@ const Home = () => {
             <p
               className={`text-xs text-right text-gray-500 ${showAdvice && progress >= 4 && progress <= 8 ? "mt-3" : "mt-1"} ${showAdvice && currentStep === 6 ? "mt-9" : ""}`}
             >
-              入力文字数: {currentInput.length} / {maxInput}
+              入力文字数: {currentInput.length} / {progress === 3 || progress === 4 || progress === 5 ? 100 : progress === 6 || progress === 8 ? 200 : progress === 7 ? 600 : 200 }
             </p>
             <textarea
                 maxLength={maxInput}
@@ -481,7 +494,7 @@ const Home = () => {
                 </label>
                 <textarea
                 type="text"
-                maxLength={maxInput}
+                maxLength={200}
                 rows={5}
                 value={writingAdvice[progress - 1]}
                 onChange={handleInputLimit}
@@ -492,7 +505,7 @@ const Home = () => {
                 <p className={showAdvice && progress === 11 ? `text-xs text-right text-gray-500 mt-7` :
                   `text-xs text-right text-gray-500 mt-1`
                 }>
-                入力文字数: {currentInput.length} / {maxInput}
+                入力文字数: {currentInput.length} / {200}
             </p>
             <textarea
                 maxLength={maxInput}
@@ -505,18 +518,25 @@ const Home = () => {
               />
           </div>
           )}
-           {showAdvice && (
-                <div className="p-4 bg-white border-black border max-w-72 min-w-72 max-h-80 min-h-80 overflow-y-auto absolute top-5 ml-4 mt-1">
-
-                    <p className="text-sm text-gray-600 text-justify">{writingAdvice[progress - 1]}</p>
-                    <button
-                    onClick={popUpAdvice}
-                    className="bg-slate-400 text-gray-600 px-4 py-2 shadow absolute bottom-4 left-1/2 transform -translate-x-1/2 w-full mt-11"
-                    >
-                    アドバイスを閉じる
-                    </button>
-                </div>
-            )}
+          {showAdvice && (
+              <div
+                  className={`p-4 bg-white border-black border max-w-72 min-w-72 max-h-80 min-h-56 overflow-y-auto absolute top-5 ml-4 ${
+                      writingAdvice[progress - 1]?.length < 200 ? "mt-10" : "mt-1"
+                  }`}
+              >
+                  <div className="grid place-items-center">
+                      <p className="text-sm text-gray-600 text-justify">
+                          {writingAdvice[progress - 1]}
+                      </p>
+                      <button
+                          onClick={popUpAdvice}
+                          className="bg-slate-400 text-gray-600 px-4 py-2 w-full mt-4"
+                      >
+                          アドバイスを閉じる
+                      </button>
+                  </div>
+              </div>
+          )}
             {progress === 9 && (
                 <div className="relative bg-white p-4 max-w-sm mx-auto ">
                 <div className="-mt-6">
@@ -547,7 +567,22 @@ const Home = () => {
                 </div>
             </div>
             )}
-            
+           {(progress === 12 || progress === 13 || progress === 14) && (
+              <div className="relative bg-white p-4 max-w-sm mx-auto">
+                  <div className="-mt-6">
+                      <textarea
+                          type="text"
+                          maxLength={maxInput}
+                          value={formData[`Question_${currentStep}`] || ""}
+                          onChange={handleInputLimit}
+                          className="w-full px-2 py-1 border-black border-2"
+                          placeholder="..."
+                          rows={6}
+                          name={`Question_${questions[currentStep]}`}
+                      />
+                  </div>
+              </div>
+          )}
           <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
             <img
               src={ArrowB}

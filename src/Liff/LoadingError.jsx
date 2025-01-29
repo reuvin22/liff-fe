@@ -1,7 +1,7 @@
 import liff from '@line/liff';
 import React, { useState } from 'react'
 
-function LoadingError() {
+function LoadingError({userId}) {
     const [copyStatus, setCopyStatus] = useState("");
     const [generate, setGenerate] = useState("");
     const [compress, setCompress] = useState(false);
@@ -15,7 +15,7 @@ function LoadingError() {
     const handleGenerate = () => {
         setIsLoading(true)
         axios.get(
-            `https://reuvindevs.com/liff/public/api/generate/U74bc9388db32ce74b3e35e88ea53f997`
+            `https://reuvindevs.com/liff/public/api/generate/${userId}`
         ).then((response) => {
             setGenerate(response.data)
             setIsGenerate(true)
