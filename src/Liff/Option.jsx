@@ -7,7 +7,7 @@ function Option({ prompt, userId }) {
   const [isGenerate, setIsGenerate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [generate, setGenerate] = useState("");
-  const navigate = useNavigate();
+  const [link, setLink] = useState("");
 
   const handleGenerate = () => {
     if (!prompt) {
@@ -21,11 +21,12 @@ function Option({ prompt, userId }) {
     const handleConvert = () => {
       setIsLoading(true);
       axios
-        .post(`https://reuvindevs.com/liff/public/api/convert/${userId}`)
+        .get(`https://reuvindevs.com/liff/public/api/convert/${userId}`)
         .then((response) => {
           const fileUrl = response.data.fileUrl;
           if (fileUrl) {
-            window.open(fileUrl, '_blank');
+            console.log(fileUrl)
+            setLink(fileUrl)
           } else {
             console.error('File URL is not available');
           }
