@@ -297,7 +297,7 @@ const Home = () => {
               }
           );
   
-          if(postResponse.data.openai === "I'm sorry, I can't assist with that request."){
+          if(postResponse.data.openai === "申し訳ありませんが、そのリクエストには対応できません。" || postResponse.data.openai === "申し訳ございませんが、このリクエストを処理することはできません。"){
             <LoadingError />
           }
           if (postResponse.status === 200) {

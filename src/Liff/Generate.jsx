@@ -21,6 +21,9 @@ function Generate({prompt, userId}) {
             `https://reuvindevs.com/liff/public/api/compress/${userId}`
         ).then((response) => {
             setCompressData(response.data)
+            if(response.data === "申し訳ありませんが、そのリクエストには対応できません。" || response.data === "申し訳ございませんが、このリクエストを処理することはできません。"){
+                <LoadingError />
+            }
             setIsCompress(true)
             setIsLoading(false)
         }).catch((error) => {
@@ -36,6 +39,9 @@ function Generate({prompt, userId}) {
             `https://reuvindevs.com/liff/public/api/generate/${userId}`
         ).then((response) => {
             setGenerate(response.data)
+            if(response.data === "申し訳ありませんが、そのリクエストには対応できません。" || response.data === "申し訳ございませんが、このリクエストを処理することはできません。"){
+                <LoadingError />
+            }
             setIsLoading(false)
         }).catch((error) => {
             return <LoadingError />

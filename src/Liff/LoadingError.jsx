@@ -20,6 +20,9 @@ function LoadingError({userId}) {
             setGenerate(response.data)
             setIsGenerate(true)
             setIsLoading(false)
+            if(response.data === "申し訳ありませんが、そのリクエストには対応できません。" || response.data === "申し訳ございませんが、このリクエストを処理することはできません。"){
+                <LoadingError />
+            }
         }).catch((error) => {
             return <LoadingError />
         });
