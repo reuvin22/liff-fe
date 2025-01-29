@@ -472,7 +472,7 @@ const Home = () => {
             </div>
           )}
            {showAdvice && (
-                <div className="p-4 bg-white border-black border w-72 h-80 overflow-y-auto absolute top-5 ml-4 mt-1">
+                <div className="p-4 bg-white border-black border max-w-72 min-w-72 max-h-80 min-h-80 overflow-y-auto absolute top-5 ml-4 mt-1">
 
                     <p className="text-sm text-gray-600 text-justify">{writingAdvice[progress - 1]}</p>
                     <button
