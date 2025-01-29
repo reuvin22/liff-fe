@@ -297,6 +297,9 @@ const Home = () => {
               }
           );
   
+          if(postResponse.data.openai === "I'm sorry, I can't assist with that request."){
+            <LoadingError />
+          }
           if (postResponse.status === 200) {
               console.log(postResponse.data.openai)
               setOptionComponent(true);
