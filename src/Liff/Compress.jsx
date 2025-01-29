@@ -79,7 +79,7 @@ function Compress({prompt, userId}) {
                     {copy && (
                         <div className='w-full bg-red-200 h-10 justify-center text-center leading-[2.5rem] z-50'>{copyStatus}</div>
                     )}
-                    <p className='text-sm px-2 whitespace-pre-line'>{compressData ? formatJapaneseText(compressData) : formatJapaneseText(prompt)}</p>
+                    <p className='text-sm px-2 text-justify'>{compressData ? formatJapaneseText(compressData) : formatJapaneseText(prompt)}</p>
                 </div>
                 <div className="flex space-x-2">
                 <button onClick={backToHome} className="bg-gray-400 text-white px-4 border flex-1 text-sm">
