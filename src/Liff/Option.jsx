@@ -21,9 +21,9 @@ function Option({ prompt, userId }) {
     const handleConvert = () => {
       setIsLoading(true);
       axios
-        .get(`https://reuvindevs.com/liff/public/api/convert/${userId}`)
+        .post(`https://reuvindevs.com/liff/public/api/convert/${userId}`)
         .then((response) => {
-          const fileUrl = response.data.fileUrl;
+          const fileUrl = response.data;
           if (fileUrl) {
             console.log(fileUrl)
             setLink(fileUrl)
