@@ -35,7 +35,9 @@ const Home = () => {
         userId: null,
         displayName: '',
         Question_1: '',
+        Ability_Desc_1: '',
         Question_2: '',
+        Ability_Desc_2: '',
         Question_3: '',
         Question_4: '',
         Question_5: '',
@@ -326,15 +328,22 @@ const Home = () => {
     const popUpAdvice = () => {
         setShowAdvice(!showAdvice)
     }
+
     const handleOptionClick = (value) => {
-        setSelectedOption(value);
-        setDropdownOpen(false);
-        setShowAdditionalDiv(true);
-        setFormData((prevData) => ({
-            ...prevData,
-            [`Question_${progress}`]: value,
-        }));
-      };
+      const abilityDescriptionIndex = options.indexOf(value);
+  
+      console.log("Selected Ability Index:", abilityDescriptionIndex);
+  
+      setSelectedOption(value);
+      setDropdownOpen(false);
+      setShowAdditionalDiv(true);
+      
+      setFormData((prevData) => ({
+          ...prevData,
+          [`Question_${progress}`]: value,
+          [`Ability_Desc_${progress}`]: showAdditionalInfo?.[abilityDescriptionIndex] || "",
+      }));
+    };
   
       const handleInputLimit = (event) => {
         const inputValue = event.target.value.slice(0, maxInput);
