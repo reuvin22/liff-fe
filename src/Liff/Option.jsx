@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import Generate from './Generate';
 import axios from 'axios';
-import ConvertDownload from './ConvertDownload';
 
 function Option({ prompt, userId }) {
   const [isGenerate, setIsGenerate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [generate, setGenerate] = useState("");
-  const [link, setLink] = useState("");
 
   const handleGenerate = () => {
     if (!prompt) {
@@ -17,30 +15,26 @@ function Option({ prompt, userId }) {
       setIsGenerate(true);
     }
   };
-  console.log('TEST USER ID: ', userId)
-    const handleConvert = () => {
-      setIsLoading(true);
-      axios
-        .post(`https://reuvindevs.com/liff/public/api/convert/${userId}`)
-        .then((response) => {
-          const fileUrl = response.data;
-          if (fileUrl) {
-            console.log(fileUrl)
-            setLink(fileUrl)
-          } else {
-            console.error('File URL is not available');
-          }
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error generating the file URL", error);
-          setIsLoading(false);
-        });
-    };
 
-  if(link){
-    return <ConvertDownload fileUrl={link}/>
-  }
+  const handleConvert = () => {
+    setIsLoading(true);
+    axios
+      .get(`https://reuvindevs.com/liff/public/api/convert/${userId}`)
+      .then((response) => {
+        const fileUrl = response.data;
+        if (fileUrl) {
+          window.open(fileUrl, '_blank');
+        } else {
+          console.error('File URL is not available');
+        }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error generating the file URL", error);
+        setIsLoading(false);
+      });
+  };
+
   if (isGenerate) {
     return <Generate 
       prompt={generate} 
@@ -69,7 +63,7 @@ function Option({ prompt, userId }) {
             {isLoading ? (
               <div className="w-7 h-7 border-4 border-t-4 border-white border-solid rounded-full animate-spin"></div>
             ) : (
-              '変換する'
+              'テキストファイル'
             )}
           </button>
         </div>
