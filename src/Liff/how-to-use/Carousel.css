@@ -1,88 +1,101 @@
-/* Carousel.css */
 .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+.carousel-container {
+  width: 350px;
+}
+
+.carousel-slide {
+  height: 550px;
+  width: 20%;
+  background-color: #fff;
+  border-radius: 5px;
+  cursor: grab;
+}
+
+.carousel-slide:active {
+  cursor: grabbing;
+}
+
+.carousel-slide h3 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.carousel-slide img {
+  margin: auto;
+  width: 250px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+}
+
+.slick-center .carousel-slide img {
+  transform: scale(1.1);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.slick-next {
+  position: absolute;
+  top: 50%;
+  transform: translateX(-20%);
+  border-radius: 50%;
+}
+
+.slick-prev {
+  position: absolute;
+  top: 50%;
+  transform: translateX(-20%);
+  border-radius: 50%;
+}
+
+.slick-arrow.slick-prev:before {
+  font-size: 24px;
+  color: black;
+}
+
+.slick-arrow.slick-next:before {
+  font-size: 24px;
+  color: black;
+}
+
+body {
+  background-color: #87bff0;
+}
+
+.App h2 {
+  text-align: center;
+  margin: 30px;
+}
+
+.App h4 {
+  text-align: center;
+  margin: 5px;
+}
+
+@media (max-width: 768px) {
+  .container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin: 20px;
   }
-  .carousel-container {
-    width: 350px;
-  }
-  
-  .carousel-slide {
-    height: 550px;
-    width: 20%;
-    background-color: #fff;
-    border-radius: 5px;
-    cursor: grab;
-  }
-  
-  .carousel-slide:active {
-    cursor: grabbing;
-  }
-  
-  .carousel-slide h3 {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  .carousel-slide img {
-    margin: auto;
-    width: 250px;
-    height: auto;
-    object-fit: cover;
-    border-radius: 5px;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .slick-center .carousel-slide img {
-    transform: scale(1.1);
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  }
-  
+
   .slick-next {
     position: absolute;
     top: 50%;
-    transform: translateX(-20%);
+    transform: translateX(-170%);
     border-radius: 50%;
   }
-  
+
   .slick-prev {
     position: absolute;
     top: 50%;
-    transform: translateX(-20%);
+    transform: translateX(150%);
     border-radius: 50%;
+    z-index: 9;
   }
-  
-  .slick-arrow.slick-prev:before {
-    font-size: 24px;
-    color: black;
-  }
-  
-  .slick-arrow.slick-next:before {
-    font-size: 24px;
-    color: black;
-  }
-  
-  @media (max-width: 768px) {
-    .container {
-      display: flex;
-      justify-content: center;
-    }
-  
-    .slick-next {
-      position: absolute;
-      top: 50%;
-      transform: translateX(-170%);
-      border-radius: 50%;
-    }
-  
-    .slick-prev {
-      position: absolute;
-      top: 50%;
-      transform: translateX(150%);
-      border-radius: 50%;
-      z-index: 9;
-    }
-  }
+}

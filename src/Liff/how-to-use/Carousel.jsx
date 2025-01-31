@@ -1,9 +1,8 @@
-// App.js
 import React from "react";
-// In index.js or App.js
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./App.css";
+import "./Carousel.css";
 import CarouselQuestion from "./CarouselQuestion";
 import CarouselOperation from "./CarouselOperation";
 import ImageA from "./questions/quesa.jpg";
