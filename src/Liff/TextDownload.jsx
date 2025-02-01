@@ -1,37 +1,52 @@
 import React, { useState } from 'react';
 import Generate from './Generate';
 import axios from 'axios';
-import TextDownload from './TextDownload';
 
-function Option({ prompt, userId }) {
+function TextDownload({ link, userId }) {  // Ensure userId is passed as a prop
   const [isGenerate, setIsGenerate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [generate, setGenerate] = useState("");
-  const [downloadLink, setDownloadLink] = useState("")
+
   const handleGenerate = () => {
-    if (!prompt) {
+    if (!generate) {
       console.log('PROMPT IS EMPTY');
     } else {
-      setGenerate(prompt);
       setIsGenerate(true);
     }
   };
 
   const handleConvert = () => {
+    if (!userId) {
+      console.error("Error: userId is undefined");
+      return;
+    }
+
     setIsLoading(true);
     axios
       .get(`https://reuvindevs.com/liff/public/api/convert/${userId}`, {
         responseType: "blob",
       })
       .then((response) => {
+        if (response.data.type === "application/json") {
+          console.error("Error:", JSON.parse(response.data));
+          setIsLoading(false);
+          return;
+        }
+
         const blob = new Blob([response.data], { type: "text/plain" });
         const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", `${userId}_generated.txt`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+
+        if (navigator.userAgent.includes("Line")) {
+          window.location.href = url; // Fix for LINE WebView
+        } else {
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", `${userId}_generated.txt`);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+
         setIsLoading(false);
       })
       .catch((error) => {
@@ -41,15 +56,11 @@ function Option({ prompt, userId }) {
   };
 
   if (isGenerate) {
-    return <Generate 
-      prompt={generate} 
-      userId={userId} 
-    />;
+    return <Generate prompt={generate} userId={userId} />;
   }
 
   const openInBrowser = () => {
-    setDownloadLink(`https://reuvindevs.com/liff/public/api/convert/${userId}`);
-    <TextDownload link={downloadLink}/>
+    window.location.href = link; 
   };
 
   return (
@@ -60,13 +71,7 @@ function Option({ prompt, userId }) {
         </div>
         <div className="flex space-x-2">
           <button 
-            onClick={handleGenerate} 
-            className="bg-green-400 py-2 text-white px-4 border flex-1 text-sm"
-          >
-            生成する
-          </button>
-          <button 
-            onClick={openInBrowser} 
+            onClick={handleConvert} 
             className="bg-orange-400 py-2 text-white px-4 border flex-1 text-sm flex justify-center items-center"
             disabled={isLoading}
           >
@@ -76,10 +81,16 @@ function Option({ prompt, userId }) {
               'テキストファイル'
             )}
           </button>
+          <button 
+            onClick={openInBrowser} 
+            className="bg-blue-400 py-2 text-white px-4 border flex-1 text-sm flex justify-center items-center"
+          >
+            ブラウザで開く
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-export default Option;
+export default TextDownload;
