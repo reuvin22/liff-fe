@@ -22,7 +22,7 @@ function Option({ prompt, userId }) {
         await window.liff.sendMessages([
           {
             type: 'text',
-            text: `Here is your download link: ${downloadUrl}`,
+            text: `Download Link: ${downloadUrl}`,
           },
         ]);
         
@@ -31,8 +31,6 @@ function Option({ prompt, userId }) {
         console.error('Error sending message:', error);
       }
     }
-
-    navigate(`/convert?userId=${userId}`);
   };
 
   if (isGenerate) {
