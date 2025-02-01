@@ -14,7 +14,24 @@ function Option({ prompt, userId }) {
     }
   };
 
-  const handleDownloadRedirect = () => {
+  const handleDownloadRedirect = async () => {
+    const downloadUrl = `https://reuvindevs.com/liff/public/api/convert/${userId}`;
+
+    if (window.liff) {
+      try {
+        await window.liff.sendMessages([
+          {
+            type: 'text',
+            text: `Here is your download link: ${downloadUrl}`,
+          },
+        ]);
+        
+        window.liff.closeWindow();
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
+    }
+
     navigate(`/convert?userId=${userId}`);
   };
 
