@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px;
 }
 .carousel-container {
   width: 350px;
@@ -11,7 +10,6 @@
 .carousel-slide {
   height: 550px;
   width: 20%;
-  background-color: #fff;
   border-radius: 5px;
   cursor: grab;
 }
