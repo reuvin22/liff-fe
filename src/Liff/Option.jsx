@@ -50,7 +50,7 @@ function Option({ prompt, userId }) {
   }
 
   const openInBrowser = () => {
-    <TextDownload userId={userId} />
+    navigate('/convert')
   };
 
   return (
