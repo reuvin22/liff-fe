@@ -19,18 +19,22 @@ function Option({ prompt, userId }) {
   const handleConvert = () => {
     setIsLoading(true);
     axios
-      .get(`https://reuvindevs.com/liff/public/api/convert/${userId}`)
+      .get(`https://reuvindevs.com/liff/public/api/convert/${userId}`, {
+        responseType: "blob",
+      })
       .then((response) => {
-        const fileUrl = response.data;
-        if (fileUrl) {
-          window.open(fileUrl, '_blank');
-        } else {
-          console.error('File URL is not available');
-        }
+        const blob = new Blob([response.data], { type: "text/plain" });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `${userId}_generated.txt`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
         setIsLoading(false);
       })
       .catch((error) => {
-        console.error("Error generating the file URL", error);
+        console.error("Error downloading the file", error);
         setIsLoading(false);
       });
   };
