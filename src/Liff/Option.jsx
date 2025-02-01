@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import Generate from './Generate';
 import axios from 'axios';
 import TextDownload from './TextDownload';
+import { useNavigate } from 'react-router-dom';
 
 function Option({ prompt, userId }) {
   const [isGenerate, setIsGenerate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [generate, setGenerate] = useState("");
   const [downloadLink, setDownloadLink] = useState("")
+  const navigate = useNavigate()
   const handleGenerate = () => {
     if (!prompt) {
       console.log('PROMPT IS EMPTY');
@@ -48,8 +50,7 @@ function Option({ prompt, userId }) {
   }
 
   const openInBrowser = () => {
-    setDownloadLink(`https://reuvindevs.com/liff/public/api/convert/${userId}`);
-    <TextDownload link={downloadLink}/>
+    <TextDownload userId={userId} />
   };
 
   return (
