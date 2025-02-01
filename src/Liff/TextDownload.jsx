@@ -60,7 +60,8 @@ function TextDownload({ link, userId }) {  // Ensure userId is passed as a prop
   }
 
   const openInBrowser = () => {
-    window.location.href = link; 
+    const downloadLink = `https://reuvindevs.com/liff/public/api/convert/${userId}`
+    window.location.href = downloadLink; 
   };
 
   return (

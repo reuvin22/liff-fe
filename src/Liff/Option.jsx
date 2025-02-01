@@ -50,7 +50,7 @@ function Option({ prompt, userId }) {
   }
 
   const openInBrowser = () => {
-    navigate('/convert')
+    navigate('/convert', { state: { userId } });
   };
 
   return (
