@@ -46,6 +46,11 @@ function Option({ prompt, userId }) {
     />;
   }
 
+  const openInBrowser = () => {
+    const externalURL = `https://reuvindevs.com/liff/public/api/convert/${userId}`;
+    window.location.href = `line://msg/text/?${encodeURIComponent("Click this link to download the file: " + externalURL)}`;
+  };
+
   return (
     <div className="min-h-screen bg-blue-100 flex justify-center items-center">
       <div className="bg-white w-80 rounded-lg shadow-lg p-4 text-center">
@@ -60,7 +65,7 @@ function Option({ prompt, userId }) {
             生成する
           </button>
           <button 
-            onClick={handleConvert} 
+            onClick={openInBrowser} 
             className="bg-orange-400 py-2 text-white px-4 border flex-1 text-sm flex justify-center items-center"
             disabled={isLoading}
           >
