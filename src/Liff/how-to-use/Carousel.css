@@ -67,7 +67,10 @@
 body {
   background-color: #87bff0;
 }
-
+.App {
+  display: grid;
+  place-items: center;
+}
 .App h2 {
   text-align: center;
   margin: 30px;
