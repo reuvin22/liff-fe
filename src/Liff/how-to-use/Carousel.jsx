@@ -106,27 +106,27 @@ const slide = [
     alt: "Slide 8",
   },
   {
-    text: "ステップ2ガクチカ/シボドウ/自己PR 生成",
+    text: "自己PR文の生成と貼り付け板への複製",
     image: OperationalI,
     alt: "Slide 9",
   },
   {
-    text: "ステップ2ガクチカ/シボドウ/自己PR 生成",
+    text: "文章に変換",
     image: OperationalJ,
     alt: "Slide 10",
   },
   {
-    text: "ステップ2ガクチカ/シボドウ/自己PR 生成",
+    text: "文章文件の下載",
     image: OperationalK,
     alt: "Slide 11",
   },
   {
-    text: "ステップ2ガクチカ/シボドウ/自己PR 生成",
+    text: "別の文章編集器で開く",
     image: OperationalL,
     alt: "Slide 12",
   },
   {
-    text: "ステップ2ガクチカ/シボドウ/自己PR 生成",
+    text: "文本生成エラー",
     image: OperationalM,
     alt: "Slide 13",
   },
