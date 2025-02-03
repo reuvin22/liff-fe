@@ -42,6 +42,7 @@ import OperationalL from "./operational/12.png";
 import OperationalM from "./operational/13.png";
 import OperationalN from "./operational/14.png";
 import OperationalO from "./operational/15.png";
+import OperationalP from "./operational/16.png";
 
 const slides = [
   { text: "質問1", image: ImageA, alt: "Slide 1" },
@@ -131,6 +132,7 @@ const slide = [
   },
   { text: "ステップ3友達に紹介", image: OperationalN, alt: "Slide 14" },
   { text: "ステップ4使い方", image: OperationalO, alt: "Slide 15" },
+  { text: "ステップ4使い方", image: OperationalP, alt: "Slide 16" },
 ];
 
 function Carousel() {
