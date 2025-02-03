@@ -54,7 +54,7 @@ function Option({ prompt, userId }) {
             onClick={handleDownloadRedirect} 
             className="bg-orange-400 py-2 text-white px-4 border flex-1 text-sm flex justify-center items-center"
           >
-            テキストファイル
+            文書ファイル
           </button>
         </div>
       </div>

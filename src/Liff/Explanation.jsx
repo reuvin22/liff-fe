@@ -59,10 +59,7 @@
     return (
       <div className="min-h-screen bg-blue-100 flex justify-center items-center">
         <div className="bg-white w-80 rounded-lg shadow-lg p-4 text-center max-w-screen-2xl">
-          <p className="font-bold">1. 設問を回答</p>
-          <div className="border py-1 border-black bg-gray-300 mb-2">
-            <p className="text-sm">1. 設問を回答</p>
-          </div>
+          <p className="font-bold">1. 設問に回答する</p>
           <div
             className="border-2 border-black p-4 mb-2 h-36 cursor-pointer overflow-y-scroll"
             onClick={openPopupQuestions}
@@ -97,7 +94,7 @@
             onClick={backToHome}
             className="border border-black p-2 bg-gray-300 w-full"
           >
-            ホームに戻る
+            主頁に戻る
           </button>
         </div>
 

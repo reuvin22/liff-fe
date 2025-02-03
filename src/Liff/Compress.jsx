@@ -73,7 +73,7 @@ function Compress({prompt, userId}) {
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
                 <div className="bg-white w-80 rounded-lg shadow-lg p-4 text-center relative">
                 <div className='border-2 border-black mt-1 bg-gray-300 mb-2'>
-                    文章の作成が完了しました。
+                    文章作成完了
                 </div>
                 <div
                 onClick={handleCopy}
@@ -92,7 +92,7 @@ function Compress({prompt, userId}) {
                     生成する
                 </button>
                 <button onClick={handleCopy} className="bg-yellow-400 text-white px-4 border flex-1 text-sm">
-                    クリップボードにコピー
+                    貼り付け板に複製
                 </button>
                 </div>
             </div>

@@ -469,7 +469,7 @@ const Home = () => {
         {progress >= 3 && progress <= 8 && (
           <div className="relative bg-white p-4 max-w-sm mx-auto">
             <label className="block text-gray-600 text-sm mb-1 -mt-7">
-              書き方のアドバイス
+              書き方の助言
             </label>
             <textarea
               type="text"
@@ -500,7 +500,7 @@ const Home = () => {
             {progress === 11 && (
                 <div className="relative bg-white p-4 max-w-sm mx-auto -mt-5">
                 <label className="block text-gray-600 text-sm mb-1">
-                書き方のアドバイス
+                書き方の助言
                 </label>
                 <textarea
                 type="text"
@@ -542,7 +542,7 @@ const Home = () => {
                           onClick={popUpAdvice}
                           className="bg-slate-400 text-gray-600 px-4 py-2 w-full mt-4"
                       >
-                          アドバイスを閉じる
+                          助言を閉じる
                       </button>
                   </div>
               </div>
