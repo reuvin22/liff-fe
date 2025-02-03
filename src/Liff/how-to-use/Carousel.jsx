@@ -131,7 +131,7 @@ const slide = [
     alt: "Slide 13",
   },
   { text: "ステップ3友達に紹介", image: OperationalN, alt: "Slide 14" },
-  { text: "ステップ4使い方", image: OperationalO, alt: "Slide 15" },
+  { text: "ステップ3友達に紹介", image: OperationalO, alt: "Slide 15" },
   { text: "ステップ4使い方", image: OperationalP, alt: "Slide 16" },
 ];
 
