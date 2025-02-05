@@ -378,7 +378,7 @@ const Home = () => {
         setCurrentInput('');
         const currentQuestionKey = `Question_${progress}`;
         if (!formData[currentQuestionKey]) {
-            alert(`Question ${progress} is required.`);
+            alert(`質問に答えてください.`);
             return;
         }
 
