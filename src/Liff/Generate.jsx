@@ -59,7 +59,7 @@ function Generate({prompt, userId}) {
 
   const handleCopy = () => {
     setCopy(true)
-    const textToCopy = prompt;
+    const textToCopy = generate ? generate : prompt;
     navigator.clipboard.writeText(textToCopy)
       .then(() => {
         setCopyStatus("コピーしました！");
