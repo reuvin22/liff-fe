@@ -292,12 +292,12 @@ const Home = () => {
       }, 6000);
   
       try {
-          const postResponse = await axios.post(
-              "https://reuvindevs.com/liff/public/api/answers",
-              formData,
+          const postResponse = await axios.delete(
+              `https://reuvindevs.com/liff/public/api/answers`,
               {
                   headers: {
                       "Content-Type": "application/json",
+                      "Authorization": `Bearer ${token}`
                   },
               }
           );
