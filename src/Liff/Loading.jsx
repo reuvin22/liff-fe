@@ -43,7 +43,7 @@ const Loading = ({ isDone }) => {
                                 className="w-full min-h-72 max-h-72"
                             />
                         ) : (
-                          <iframe src={ads.url} className="w-full min-h-72 max-h-72" allow="autoplay" style={{ pointerEvents: "none" }}></iframe>
+                          <iframe src={`${ads.url}?autoplay=1&controls=0&disablekb=1`} className="w-full min-h-72 max-h-72" allow="autoplay" style={{ pointerEvents: "none" }}></iframe>
                         )
                     ) : (
                         <p>Loading media...</p>
