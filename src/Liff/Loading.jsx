@@ -9,14 +9,13 @@ const Loading = ({ isDone }) => {
         let interval;
 
         const fetchAds = async () => {
-            if (isDone) return;
-
             try {
                 const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
                 setAds(response.data);
                 console.log("Fetched Ads Data:", response.data);
 
                 if (timeoutRef) clearTimeout(timeoutRef);
+
                 timeoutRef = setTimeout(() => {
                     setAds({});
                 }, 15000);
@@ -46,7 +45,7 @@ const Loading = ({ isDone }) => {
                     文章の作成が完了しました
                 </div>
                 <div className="min-h-72 border-2 border-black bg-white mb-2 overflow-auto overflow-x-hidden">
-                    {ads.url && !isDone ? (
+                    {ads.url ? (
                         ads.mime_type && ads.mime_type.includes("image") ? (
                             <img
                                 src={ads.url}
@@ -62,7 +61,7 @@ const Loading = ({ isDone }) => {
                             ></iframe>
                         )
                     ) : (
-                        <p>Generating</p>
+                        <p>Loading media...</p>
                     )}
                 </div>
             </div>
