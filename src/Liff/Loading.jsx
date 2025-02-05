@@ -12,9 +12,10 @@ const Loading = ({ isDone }) => {
 
         const fetchAds = async () => {
             try {
-                const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
+                const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files").then((response) => {
+                    console.log(response)
+                });
                 console.log("Fetched Ads Data:", response.data);
-
                 if (!isWaiting) {
                     setAds(response.data);
                     setIsWaiting(true);
