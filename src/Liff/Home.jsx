@@ -22,7 +22,7 @@ const Home = () => {
     const [prompt, setPrompt] = useState("")
     const [questionList, setQuestionList] = useState([])
     const [writingAdvice, setWritingAdvice] = useState([])
-    console.log(progress)
+    const [isDone, setIsDone] = useState(false)
     const maxInput =
     progress === 3 || progress === 4 || progress === 5
       ? 100
@@ -202,8 +202,6 @@ const Home = () => {
           const response = await axios.get("https://reuvindevs.com/liff/public/api/questions");
           setQuestionList(response.data.questions);
           setWritingAdvice(response.data.writing_advice);
-          console.log('THIS IS QUESTION LIST: ', questionList)
-          console.log(writingAdvice)
         } catch (error) {
           console.error("Error fetching questions:", error);
           alert("Error fetching questions. Please try again later.");
@@ -214,7 +212,6 @@ const Home = () => {
   
       fetchQuestions();
     }, []);
-
 
     useEffect(() => {
       const loadLIFF = async () => {
@@ -285,7 +282,15 @@ const Home = () => {
     const handleSubmit = async () => {
       console.log(formData);
       setIsLoading(true);
-      
+      setIsDone(false);
+  
+      let timeoutFlag = false;
+  
+      const timeout = setTimeout(() => {
+          timeoutFlag = true;
+          setIsDone(true)
+      }, 6000);
+  
       try {
           const postResponse = await axios.post(
               "https://reuvindevs.com/liff/public/api/answers",
@@ -297,13 +302,20 @@ const Home = () => {
               }
           );
   
-          if(postResponse.data.openai === "申し訳ありませんが、そのリクエストには対応できません。" || postResponse.data.openai === "申し訳ございませんが、このリクエストを処理することはできません。"){
-            <LoadingError />
+          clearTimeout(timeout);
+  
+          if (
+              postResponse.data.openai === "申し訳ありませんが、そのリクエストには対応できません。" ||
+              postResponse.data.openai === "申し訳ございませんが、このリクエストを処理することはできません。"
+          ) {
+              setHasError(true);
           }
           if (postResponse.status === 200) {
-              console.log(postResponse.data.openai)
+              setIsDone(false)
+              console.log(postResponse.data.openai);
               setOptionComponent(true);
-              setPrompt(postResponse.data.openai)
+              setPrompt(postResponse.data.openai);
+              setIsDone(true);
           } else {
               console.error("Submission failed: ", postResponse.data);
           }
@@ -322,7 +334,7 @@ const Home = () => {
       />
     }
     if (isLoading) {
-      return <Loading />;
+      return <Loading isDone={isDone}/>;
     }
 
     const popUpAdvice = () => {
