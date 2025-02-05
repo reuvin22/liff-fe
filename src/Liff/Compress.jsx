@@ -28,6 +28,7 @@ function Compress({prompt, userId}) {
             `https://reuvindevs.com/liff/public/api/generate/${userId}`
         ).then((response) => {
             setGenerate(response.data)
+            console.log(response.data)
             if(response.data === "申し訳ありませんが、そのリクエストには対応できません。" || response.data === "申し訳ございませんが、このリクエストを処理することはできません。"){
                 <LoadingError />
             }

@@ -79,7 +79,7 @@ const Loading = ({ isDone }) => {
                             ></iframe>
                         )
                     ) : (
-                        <p>Loading media...</p>
+                        <p>Please wait....</p>
                     )}
                 </div>
             </div>
