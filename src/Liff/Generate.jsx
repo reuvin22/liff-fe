@@ -3,6 +3,7 @@ import axios from 'axios';
 import Loading from './Loading';
 import Compress from './Compress';
 import Home from './Home';
+import LoadingError from './LoadingError';
 function Generate({prompt, userId}) {
     const [copyStatus, setCopyStatus] = useState("");
     const [generate, setGenerate] = useState("");
