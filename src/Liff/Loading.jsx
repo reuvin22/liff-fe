@@ -9,6 +9,7 @@ const Loading = ({ generate }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [countdown, setCountdown] = useState(15); // Countdown timer
     const context = useAdsContext();
+
     useEffect(() => {
         let timeoutRef;
         let intervalRef;
@@ -28,7 +29,11 @@ const Loading = ({ generate }) => {
                     // Start countdown timer
                     intervalRef = setInterval(() => {
                         setCountdown((prev) => {
-                            console.log("Current Countdown:", prev - 1);
+                            if (prev > 1) {
+                                console.log("Current Countdown:", prev - 1);
+                            } else {
+                                console.log("Current Countdown: 0 (Ad about to finish)");
+                            }
                             return prev > 0 ? prev - 1 : 0;
                         });
                     }, 1000);
@@ -74,7 +79,11 @@ const Loading = ({ generate }) => {
 
             let intervalRef = setInterval(() => {
                 setCountdown((prev) => {
-                    console.log("Current Countdown:", prev - 1);
+                    if (prev > 1) {
+                        console.log("Current Countdown:", prev - 1);
+                    } else {
+                        console.log("Current Countdown: 0 (Ad about to finish)");
+                    }
                     return prev > 0 ? prev - 1 : 0;
                 });
             }, 1000);
@@ -84,7 +93,7 @@ const Loading = ({ generate }) => {
                 context.setIsLoading(false);
                 clearInterval(intervalRef);
                 console.log("Queued ad finished playing. Countdown stopped.");
-                console.log("context.isLoading:", isLoading);
+                console.log("context.isLoading:", context.isLoading);
             }, 15000);
         }
     }, [isPlaying, newAd]);

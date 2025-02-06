@@ -338,8 +338,6 @@ const Home = () => {
     const handleOptionClick = (value) => {
       const abilityDescriptionIndex = options.indexOf(value);
   
-      console.log("Selected Ability Index:", abilityDescriptionIndex);
-  
       setSelectedOption(value);
       setDropdownOpen(false);
       setShowAdditionalDiv(true);
