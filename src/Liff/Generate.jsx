@@ -55,6 +55,7 @@ function Generate({prompt, userId}) {
         });
     }
 
+    console.log(context.isLoading)
     if(isCompress){
         return <Compress 
             prompt={compressData}
