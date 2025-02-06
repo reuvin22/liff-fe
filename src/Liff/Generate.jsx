@@ -16,22 +16,29 @@ function Generate({prompt, userId}) {
     const [home, setHome] = useState(false)
     const [copy, setCopy] = useState(false)
     const context = useAdsContext()
+
     const handleCompress = () => {
-        axios.get(
-            `https://reuvindevs.com/liff/public/api/compress/${userId}`
-        ).then((response) => {
-            setCompressData(response.data)
-            if(response.data === "申し訳ありませんが、そのリクエストには対応できません。" || response.data === "申し訳ございませんが、このリクエストを処理することはできません。"){
-                <LoadingError />
-            }
-            setIsCompress(true)
-            setIsLoading(false)
-        }).catch((error) => {
-            return <LoadingError 
-                userId={userId}
-            />
-        });
-    }
+        setIsLoading(true); // Show Loading component
+    
+        axios.get(`https://reuvindevs.com/liff/public/api/compress/${userId}`)
+            .then((response) => {
+                setCompressData(response.data);
+                
+                if (response.data === "申し訳ありませんが、そのリクエストには対応できません。" || 
+                    response.data === "申し訳ございませんが、このリクエストを処理することはできません。") {
+                    return <LoadingError />;
+                }
+    
+                setTimeout(() => {
+                    setIsCompress(true);
+                    setIsLoading(false);
+                }, 1500);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                return <LoadingError userId={userId} />;
+            });
+    };    
     
     const handleGenerate = () => {
         setIsLoading(true)
@@ -54,7 +61,7 @@ function Generate({prompt, userId}) {
             userId = {userId}
         />
     }
-    if(isLoading){
+    if(isLoading === true){
         return <Loading />;
     }
 
