@@ -3,11 +3,11 @@ import axios from "axios";
 import { AppContext } from "../context/AppContext"; // Assuming context for isLoading
 
 const Loading = ({ generate }) => {
-    const { setIsLoading } = useContext(AppContext);
+    const { isLoading, setIsLoading } = useContext(AppContext);
     const [ads, setAds] = useState(null);
     const [newAd, setNewAd] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [countdown, setCountdown] = useState(15); // Countdown Timer
+    const [countdown, setCountdown] = useState(15); // Countdown timer state
 
     useEffect(() => {
         let timeoutRef;
@@ -22,16 +22,17 @@ const Loading = ({ generate }) => {
                     setAds(response.data);
                     setIsPlaying(true);
                     setCountdown(15); // Reset countdown
+                    setIsLoading(true); // Start loading state
 
                     // Start countdown timer
                     intervalRef = setInterval(() => {
                         setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
                     }, 1000);
 
-                    // Ensure ad plays for 15 seconds before switching
+                    // Ensure ad plays for 15 seconds
                     timeoutRef = setTimeout(() => {
                         setIsPlaying(false);
-                        setIsLoading(false); // Set isLoading to false after 15 sec
+                        setIsLoading(false); // Set loading to false after 15 sec
                         clearInterval(intervalRef); // Stop countdown
                     }, 15000);
                 } else {
@@ -43,7 +44,7 @@ const Loading = ({ generate }) => {
         };
 
         if (generate) {
-            console.log("Generate is populated, context.isLoading:", isPlaying);
+            console.log("Generate is populated, context.isLoading:", isLoading);
         }
 
         fetchAds();
@@ -52,15 +53,15 @@ const Loading = ({ generate }) => {
             clearTimeout(timeoutRef);
             clearInterval(intervalRef);
         };
-    }, [generate]); // Refetch ads when generate updates
+    }, [generate]); // Fetch ads when generate updates
 
     useEffect(() => {
         if (!isPlaying && newAd) {
-            // Play the queued ad after the previous ad completes
             setAds(newAd);
             setNewAd(null);
             setIsPlaying(true);
             setCountdown(15);
+            setIsLoading(true);
 
             let intervalRef = setInterval(() => {
                 setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
