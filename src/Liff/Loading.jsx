@@ -29,15 +29,17 @@ const Loading = ({ generate }) => {
 
                 if (generate) {
                     console.log("📢 `generate` has content! Waiting for 15s before setting `isDone = false`...");
+                    
                     setTimeout(() => {
                         console.log("🛑 15s ended! Now setting `isDone = false`.");
                         context.setIsDone(false);
-                        console.log("Context value (Loading):", context.isDone);
+                        console.log("🔹 Context value (Loading - After 15s):", context.isDone);
                     }, 15000);
+
                 } else {
                     console.log("❌ `generate` is empty. Setting `isDone = true`...");
                     context.setIsDone(true);
-                    console.log("Context value (Loading):", context.isDone);
+                    console.log("🔹 Context value (Loading - No generate):", context.isDone);
                 }
             }, 15000);
         } catch (error) {

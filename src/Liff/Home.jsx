@@ -282,7 +282,7 @@ const Home = () => {
   
     const handleSubmit = async () => {
       console.log("🔹 Form Data:", formData);
-      setIsLoading(true);
+      context.setIsLoading(true);
       context.setIsDone(false);
       console.log("🔹 Context value before API call (Home):", context.isDone);
   
@@ -321,8 +321,6 @@ const Home = () => {
       } catch (error) {
           console.error("❌ Error during submission:", error);
           alert("An error occurred while processing your request.");
-      } finally {
-          setIsLoading(false);
       }
   };  
     
@@ -330,7 +328,7 @@ const Home = () => {
         return <Option prompt={prompt} userId={userId} />;
     }
     
-    if (isLoading) {
+    if (context.isLoading) {
         return <Loading generate={prompt}/>;
     }  
 
