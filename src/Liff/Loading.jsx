@@ -66,7 +66,7 @@ const Loading = ({ generate }) => {
             clearTimeout(timeoutRef);
             clearInterval(intervalRef);
         };
-    }, [generate]); // Fetch ads when generate updates
+    }, []); // Fetch ads when generate updates
 
     useEffect(() => {
         if (!isPlaying && newAd) {
@@ -121,11 +121,8 @@ const Loading = ({ generate }) => {
                             ></iframe>
                         )
                     ) : (
-                        <p>Please wait....</p>
+                        <p>Please waitsssss....</p>
                     )}
-                </div>
-                <div className="text-gray-600 mt-2">
-                    Ad will finish in {countdown} seconds...
                 </div>
             </div>
         </div>
