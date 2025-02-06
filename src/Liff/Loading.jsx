@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useAdsContext } from "../utils/context";
 
-const Loading = ({ isDone }) => {
+const Loading = ({ generate }) => {
     const [ads, setAds] = useState({});
     const [newAd, setNewAd] = useState(null);
     const [isWaiting, setIsWaiting] = useState(false);
-
+    const context = useAdsContext()
     useEffect(() => {
         let interval;
         let timeoutRef;
@@ -30,19 +31,25 @@ const Loading = ({ isDone }) => {
             }
         };
 
-        if (!isDone) {
+        if (!generate) {
             fetchAds();
 
             interval = setInterval(() => {
                 fetchAds();
             }, 15000);
+        }else if(generate){
+            if(interval){
+                setTimeout(() => 15000)
+            }
+        }else {
+            context.isLoading(false)
         }
 
         return () => {
             clearInterval(interval);
             clearTimeout(timeoutRef);
         };
-    }, [isDone]);
+    }, [generate]);
 
     useEffect(() => {
         if (!isWaiting && newAd) {
