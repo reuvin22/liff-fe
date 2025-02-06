@@ -18,7 +18,6 @@ const Home = () => {
     const [selectedOption, setSelectedOption] = useState("");
     const [currentInput, setCurrentInput] = useState("");
     const [showAdvice, setShowAdvice] = useState(false);
-    const [isLoading, setIsLoading] = useState(false)
     const [optionComponent, setOptionComponent] = useState(false)
     const [prompt, setPrompt] = useState("")
     const [questionList, setQuestionList] = useState([])
@@ -207,7 +206,7 @@ const Home = () => {
           console.error("Error fetching questions:", error);
           alert("Error fetching questions. Please try again later.");
         } finally {
-          setIsLoading(false);
+          context.setIsLoading(false);
         }
       };
   
@@ -322,14 +321,14 @@ const Home = () => {
       }
   };
     
-    if(optionComponent){
+    if(optionComponent && context.isLoading === false){
       return <Option 
         prompt={prompt}
         userId={userId}
       />
     }
     if (context.isLoading) {
-      return <Loading generate={prompt} />;
+      return <Loading generate={prompt}/>;
     }
 
     const popUpAdvice = () => {

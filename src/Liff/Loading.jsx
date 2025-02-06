@@ -1,82 +1,58 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { useAdsContext } from "../utils/context";
+import { AppContext } from "../context/AppContext"; // Assuming context for isLoading
 
 const Loading = ({ generate }) => {
-    const [ads, setAds] = useState({});
+    const { setIsLoading } = useContext(AppContext);
+    const [ads, setAds] = useState(null);
     const [newAd, setNewAd] = useState(null);
-    const [isWaiting, setIsWaiting] = useState(false);
-    const context = useAdsContext();
-    const [counter, setCounter] = useState(15); // Initialize counter to 15
+    const [isPlaying, setIsPlaying] = useState(false);
 
     useEffect(() => {
-        let interval;
         let timeoutRef;
-        let countdownInterval;
-    
+
         const fetchAds = async () => {
             try {
                 const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
                 console.log("Fetched Ads Data:", response.data);
-    
-                if (!isWaiting) {
+
+                if (!isPlaying) {
+                    // If no ad is playing, start playing the fetched ad
                     setAds(response.data);
-                    setIsWaiting(true);
-                    setCounter(15); // Reset counter when new ad is fetched
-    
+                    setIsPlaying(true);
+
+                    // Ensure the ad plays for 15 seconds before switching
                     timeoutRef = setTimeout(() => {
-                        setIsWaiting(false);
+                        setIsPlaying(false);
+                        setIsLoading(false); // Set isLoading to false after 15 sec
                     }, 15000);
                 } else {
+                    // Queue the new ad if one is already playing
                     setNewAd(response.data);
                 }
             } catch (error) {
                 console.error("Error fetching ads:", error);
             }
         };
-    
-        if (!generate) {
-            fetchAds();
-    
-            interval = setInterval(() => {
-                fetchAds();
-            }, 15000);
-        } else {
-            setCounter(15); // Reset counter when generate is triggered
-    
-            countdownInterval = setInterval(() => {
-                setCounter((prevCounter) => {
-                    if (prevCounter > 0) {
-                        console.log("Counter:", prevCounter - 1);
-                        return prevCounter - 1;
-                    } else {
-                        clearInterval(countdownInterval); // Ensure countdown stops at 0
-                        return 0;
-                    }
-                });
-            }, 1000);
-        }
-    
-        return () => {
-            if (!generate) {
-                clearInterval(interval);
-                clearTimeout(timeoutRef);
-            }
-            clearInterval(countdownInterval); // Ensure countdown stops only when needed
-        };
-    }, [generate]);  // Removed context from dependencies to prevent unnecessary re-runs    
+
+        fetchAds();
+
+        return () => clearTimeout(timeoutRef); // Cleanup timeout when unmounting
+    }, [generate]); // Refetch ads when generate is updated
 
     useEffect(() => {
-        if (!isWaiting && newAd) {
+        if (!isPlaying && newAd) {
+            // Play the queued ad after the previous ad completes
             setAds(newAd);
             setNewAd(null);
-            setIsWaiting(true);
-            setCounter(15) // Reset counter when new ad is being set
+            setIsPlaying(true);
+
             setTimeout(() => {
-                setIsWaiting(false);
+                setIsPlaying(false);
+                setIsLoading(false);
             }, 15000);
         }
-    }, [isWaiting, newAd]);
+    }, [isPlaying, newAd]);
 
     return (
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
@@ -85,8 +61,8 @@ const Loading = ({ generate }) => {
                     文章の作成が完了しました
                 </div>
                 <div className="min-h-72 border-2 border-black bg-white mb-2 overflow-auto overflow-x-hidden">
-                    {ads.url ? (
-                        ads.mime_type && ads.mime_type.includes("image") ? (
+                    {ads?.url ? (
+                        ads.mime_type?.includes("image") ? (
                             <img
                                 src={ads.url}
                                 alt={ads.name || "Ad Image"}
@@ -101,7 +77,7 @@ const Loading = ({ generate }) => {
                             ></iframe>
                         )
                     ) : (
-                        <p>Please wait.... {counter}</p>
+                        <p>Please wait....</p>
                     )}
                 </div>
             </div>
