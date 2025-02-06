@@ -7,9 +7,11 @@ const Loading = ({ generate }) => {
     const [ads, setAds] = useState(null);
     const [newAd, setNewAd] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [countdown, setCountdown] = useState(15); // Countdown Timer
 
     useEffect(() => {
         let timeoutRef;
+        let intervalRef;
 
         const fetchAds = async () => {
             try {
@@ -17,28 +19,40 @@ const Loading = ({ generate }) => {
                 console.log("Fetched Ads Data:", response.data);
 
                 if (!isPlaying) {
-                    // If no ad is playing, start playing the fetched ad
                     setAds(response.data);
                     setIsPlaying(true);
+                    setCountdown(15); // Reset countdown
 
-                    // Ensure the ad plays for 15 seconds before switching
+                    // Start countdown timer
+                    intervalRef = setInterval(() => {
+                        setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
+                    }, 1000);
+
+                    // Ensure ad plays for 15 seconds before switching
                     timeoutRef = setTimeout(() => {
                         setIsPlaying(false);
                         setIsLoading(false); // Set isLoading to false after 15 sec
+                        clearInterval(intervalRef); // Stop countdown
                     }, 15000);
                 } else {
-                    // Queue the new ad if one is already playing
-                    setNewAd(response.data);
+                    setNewAd(response.data); // Queue new ad if one is playing
                 }
             } catch (error) {
                 console.error("Error fetching ads:", error);
             }
         };
 
+        if (generate) {
+            console.log("Generate is populated, context.isLoading:", isPlaying);
+        }
+
         fetchAds();
 
-        return () => clearTimeout(timeoutRef); // Cleanup timeout when unmounting
-    }, [generate]); // Refetch ads when generate is updated
+        return () => {
+            clearTimeout(timeoutRef);
+            clearInterval(intervalRef);
+        };
+    }, [generate]); // Refetch ads when generate updates
 
     useEffect(() => {
         if (!isPlaying && newAd) {
@@ -46,10 +60,16 @@ const Loading = ({ generate }) => {
             setAds(newAd);
             setNewAd(null);
             setIsPlaying(true);
+            setCountdown(15);
+
+            let intervalRef = setInterval(() => {
+                setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
+            }, 1000);
 
             setTimeout(() => {
                 setIsPlaying(false);
                 setIsLoading(false);
+                clearInterval(intervalRef);
             }, 15000);
         }
     }, [isPlaying, newAd]);
@@ -80,6 +100,7 @@ const Loading = ({ generate }) => {
                         <p>Please wait....</p>
                     )}
                 </div>
+                <div className="text-gray-600 mt-2">Ad will finish in {countdown} seconds...</div>
             </div>
         </div>
     );
