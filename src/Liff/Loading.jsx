@@ -7,8 +7,6 @@ const Loading = ({ isDone }) => {
     const timeoutIdRef = useRef(null); // Store timeout ID across renders
 
     const fetchAds = async () => {
-        if (isWaiting) return;
-
         try {
             setIsWaiting(true);
             const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
@@ -17,7 +15,7 @@ const Loading = ({ isDone }) => {
 
             timeoutIdRef.current = setTimeout(() => {
                 setIsWaiting(false);
-                fetchAds(); // Schedule the next fetch
+                fetchAds();
             }, 15000);
         } catch (error) {
             console.error("Error fetching ads:", error);
@@ -27,12 +25,12 @@ const Loading = ({ isDone }) => {
 
     useEffect(() => {
         if (!isDone) {
-            fetchAds(); // Start fetching only if isDone is false
+            fetchAds();
         }
 
         return () => {
             if (timeoutIdRef.current) {
-                clearTimeout(timeoutIdRef.current); // Clean up timeout on unmount
+                clearTimeout(timeoutIdRef.current);
             }
         };
     }, [isDone]);
