@@ -81,7 +81,7 @@ const Loading = ({ generate }) => {
                             ></iframe>
                         )
                     ) : (
-                        <p>Please wait...</p>
+                        <p>お待ちください...</p>
                     )}
                 </div>
             </div>

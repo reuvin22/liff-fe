@@ -49,7 +49,7 @@ function Compress({prompt, userId}) {
         />
     }
     if(context.isLoading){
-        return <Loading generate={generate}/>
+        return <Loading />
     }
 
     const handleCopy = () => {

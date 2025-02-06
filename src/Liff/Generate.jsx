@@ -4,6 +4,7 @@ import Loading from './Loading';
 import Compress from './Compress';
 import Home from './Home';
 import LoadingError from './LoadingError';
+import { useAdsContext } from '../utils/context';
 function Generate({prompt, userId}) {
     const [copyStatus, setCopyStatus] = useState("");
     const [generate, setGenerate] = useState("");
@@ -14,8 +15,14 @@ function Generate({prompt, userId}) {
     const [isLoading, setIsLoading] = useState(false)
     const [home, setHome] = useState(false)
     const [copy, setCopy] = useState(false)
+    const context = useAdsContext()
     const handleCompress = () => {
-        setIsLoading(true)
+        context.setIsLoading(true)
+
+        const timeout = setTimeout(() => {
+            timeoutFlag = true;
+        }, 6000);
+
         axios.get(
             `https://reuvindevs.com/liff/public/api/compress/${userId}`
         ).then((response) => {
@@ -30,6 +37,7 @@ function Generate({prompt, userId}) {
                 userId={userId}
             />
         });
+        clearTimeout(timeout)
     }
     
     const handleGenerate = () => {
@@ -47,13 +55,13 @@ function Generate({prompt, userId}) {
         });
     }
 
-    if(isCompress){
+    if(context.isReady === true){
         return <Compress 
             prompt={compressData}
             userId = {userId}
         />
     }
-    if(isLoading){
+    if(context.isLoading){
         return <Loading />;
     }
 
