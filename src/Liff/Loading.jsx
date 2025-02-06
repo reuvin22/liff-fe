@@ -7,7 +7,6 @@ const Loading = ({ isDone, onLoadingComplete }) => {
     const [counter, setCounter] = useState(15);
     const timeoutRef = useRef(null);
     const intervalRef = useRef(null);
-    const adPlayComplete = useRef(false);
 
     const fetchAds = async () => {
         if (isWaiting) return;
@@ -20,14 +19,10 @@ const Loading = ({ isDone, onLoadingComplete }) => {
             setAds(response.data);
             setIsWaiting(true);
             setCounter(15);
-            adPlayComplete.current = false;
 
             timeoutRef.current = setTimeout(() => {
                 setIsWaiting(false);
-                adPlayComplete.current = true;
-
-                if (isDone && adPlayComplete.current) {
-                    console.log("Ad play finished. Removing Loading component...");
+                if (isDone) {
                     onLoadingComplete();
                 }
             }, 15000);

@@ -311,11 +311,10 @@ const Home = () => {
               setHasError(true);
           }
           if (postResponse.status === 200) {
-              setIsDone(false)
               console.log(postResponse.data.openai);
               setOptionComponent(true);
               setPrompt(postResponse.data.openai);
-              setIsDone(true);
+              setIsDone(false)
           } else {
               console.error("Submission failed: ", postResponse.data);
           }
@@ -334,8 +333,8 @@ const Home = () => {
       />
     }
     if (isLoading) {
-      return <Loading isDone={isDone} onLoadingComplete={() => setIsLoading(false)} />;
-  }
+      return <Loading isDone={isDone}/>;
+    }
 
     const popUpAdvice = () => {
         setShowAdvice(!showAdvice)
