@@ -4,26 +4,31 @@ import axios from "axios";
 const Loading = ({ isDone, onLoadingComplete }) => {
     const [ads, setAds] = useState(null);
     const [isWaiting, setIsWaiting] = useState(false);
-    const [counter, setCounter] = useState(15); // Countdown timer before next API fetch
+    const [counter, setCounter] = useState(15);
     const timeoutRef = useRef(null);
     const intervalRef = useRef(null);
+    const adPlayComplete = useRef(false);
 
     const fetchAds = async () => {
-        if (isWaiting) return; // Prevent duplicate requests
+        if (isWaiting) return;
 
-        console.log("Fetching new ad in 3...2...1..."); // Logs before fetching
+        console.log("Fetching new ad in 3...2...1...");
         try {
             const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
             console.log("Fetched Ads Data:", response.data);
 
             setAds(response.data);
             setIsWaiting(true);
-            setCounter(15); // Reset counter after fetching
+            setCounter(15);
+            adPlayComplete.current = false;
 
             timeoutRef.current = setTimeout(() => {
                 setIsWaiting(false);
-                if (isDone) {
-                    onLoadingComplete(); // Only exit after ad has finished
+                adPlayComplete.current = true;
+
+                if (isDone && adPlayComplete.current) {
+                    console.log("Ad play finished. Removing Loading component...");
+                    onLoadingComplete();
                 }
             }, 15000);
         } catch (error) {
@@ -32,18 +37,18 @@ const Loading = ({ isDone, onLoadingComplete }) => {
     };
 
     useEffect(() => {
-        fetchAds(); // Initial fetch
+        fetchAds();
 
         intervalRef.current = setInterval(() => {
             setCounter((prev) => {
                 console.log(`Next API fetch in: ${prev} seconds`);
                 if (prev <= 1) {
-                    fetchAds(); // Fetch when countdown reaches 0
+                    fetchAds();
                     return 15;
                 }
                 return prev - 1;
             });
-        }, 1000); // Countdown updates every second
+        }, 1000);
 
         return () => {
             clearInterval(intervalRef.current);
