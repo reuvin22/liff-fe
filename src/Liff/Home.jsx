@@ -281,47 +281,50 @@ const Home = () => {
     }, [userId]);
   
     const handleSubmit = async () => {
-        console.log(formData);
-        setIsLoading(true);
-        context.setIsDone(false);
-    
-        const timeout = setTimeout(() => {
-            context.setIsDone(true);
-        }, 6000);
-    
-        try {
-            const postResponse = await axios.post(
-                "https://reuvindevs.com/liff/public/api/answers",
-                formData,
-                {
-                    headers: { "Content-Type": "application/json" },
-                }
-            );
-    
-            clearTimeout(timeout);
-    
-            if (
-                postResponse.data.openai === "申し訳ありませんが、そのリクエストには対応できません。" ||
-                postResponse.data.openai === "申し訳ございませんが、このリクエストを処理することはできません。"
-            ) {
-                setHasError(true);
-            }
-    
-            if (postResponse.status === 200) {
-                console.log(postResponse.data.openai);
-                setOptionComponent(true);
-                setPrompt(postResponse.data.openai);
-                context.setIsDone(true);
-            } else {
-                console.error("Submission failed: ", postResponse.data);
-            }
-        } catch (error) {
-            console.error("Error during submission or fetching prompt:", error);
-            alert("An error occurred while processing your request.");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+      console.log("🔹 Form Data:", formData);
+      setIsLoading(true);
+      context.setIsDone(false);
+      console.log("🔹 Context value before API call (Home):", context.isDone);
+  
+      const timeout = setTimeout(() => {
+          context.setIsDone(true);
+          console.log("🔹 Timeout reached: `isDone` set to true (Home)");
+      }, 6000);
+  
+      try {
+          const postResponse = await axios.post(
+              "https://reuvindevs.com/liff/public/api/answers",
+              formData,
+              {
+                  headers: { "Content-Type": "application/json" },
+              }
+          );
+  
+          clearTimeout(timeout);
+  
+          if (
+              postResponse.data.openai === "申し訳ありませんが、そのリクエストには対応できません。" ||
+              postResponse.data.openai === "申し訳ございませんが、このリクエストを処理することはできません。"
+          ) {
+              setHasError(true);
+          }
+  
+          if (postResponse.status === 200) {
+              console.log("✅ API Response:", postResponse.data.openai);
+              setOptionComponent(true);
+              setPrompt(postResponse.data.openai);
+              context.setIsDone(true);
+              console.log("🔹 Context value after API call (Home):", context.isDone);
+          } else {
+              console.error("❌ Submission failed: ", postResponse.data);
+          }
+      } catch (error) {
+          console.error("❌ Error during submission:", error);
+          alert("An error occurred while processing your request.");
+      } finally {
+          setIsLoading(false);
+      }
+  };  
     
     if (optionComponent) {
         return <Option prompt={prompt} userId={userId} />;

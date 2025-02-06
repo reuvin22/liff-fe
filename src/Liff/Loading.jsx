@@ -13,7 +13,7 @@ const Loading = ({ generate }) => {
     const fetchAds = async () => {
         if (isWaiting) return;
 
-        console.log("🚀 Fetching new ad in 3...2...1...");
+        console.log("🚀 Fetching new ad...");
         try {
             const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
             console.log("✅ Fetched Ads Data:", response.data);
@@ -28,14 +28,16 @@ const Loading = ({ generate }) => {
                 setIsWaiting(false);
 
                 if (generate) {
-                    console.log("📢 `generate` has content! Waiting for 15s before setting `isDone` to false...");
+                    console.log("📢 `generate` has content! Waiting for 15s before setting `isDone = false`...");
                     setTimeout(() => {
-                        console.log("🛑 15s ended! Now hiding ads (isDone = false).");
+                        console.log("🛑 15s ended! Now setting `isDone = false`.");
                         context.setIsDone(false);
+                        console.log("Context value (Loading):", context.isDone);
                     }, 15000);
                 } else {
-                    console.log("❌ `generate` is still empty. Setting `isDone` to true and fetching more ads...");
+                    console.log("❌ `generate` is empty. Setting `isDone = true`...");
                     context.setIsDone(true);
+                    console.log("Context value (Loading):", context.isDone);
                 }
             }, 15000);
         } catch (error) {
