@@ -26,6 +26,13 @@ const Loading = ({ generate }) => {
                 } else {
                     setNewAd(response.data);
                 }
+                if(generate){
+                    if(timeoutRef){
+                        context.setIsLoading(true)
+                    }
+                }else {
+                    context.setIsLoading(false)
+                }
             } catch (error) {
                 console.error("Error fetching ads:", error);
             }
@@ -38,9 +45,8 @@ const Loading = ({ generate }) => {
                 fetchAds();
             }, 15000);
         }
-
+        
         return () => {
-            context.setIsLoading(false)
             clearInterval(interval);
             clearTimeout(timeoutRef);
         };
