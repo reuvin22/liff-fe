@@ -313,7 +313,6 @@ const Home = () => {
               console.log("✅ API Response:", postResponse.data.openai);
               setOptionComponent(true);
               setPrompt(postResponse.data.openai);
-              context.setIsDone(true);
               console.log("🔹 Context value after API call (Home):", context.isDone);
           } else {
               console.error("❌ Submission failed: ", postResponse.data);

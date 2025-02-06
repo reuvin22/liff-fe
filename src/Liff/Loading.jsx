@@ -12,36 +12,37 @@ const Loading = ({ generate }) => {
 
     const fetchAds = async () => {
         if (isWaiting) return;
-
+    
         console.log("🚀 Fetching new ad...");
         try {
             const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
             console.log("✅ Fetched Ads Data:", response.data);
-
+    
             setAds(response.data);
             setIsWaiting(true);
             setCounter(15);
-
+            context.setIsLoading(true); // Ensure loading is active until 15s ends
+    
             console.log("⏳ Playing ad for 15 seconds...");
-
+    
             timeoutRef.current = setTimeout(() => {
                 setIsWaiting(false);
-
+    
                 if (generate) {
-                    console.log("📢 `generate` has content! Waiting for 15s before setting `isDone = false` and `isLoading = false`...");
-                    
-                    setTimeout(() => {
-                        console.log("🛑 15s ended! Now setting `isDone = false` and `isLoading = false`.");
-                        context.setIsDone(false);
-                        context.setIsLoading(false);
-                        console.log("🔹 Context (Loading - After 15s):", { isDone: context.isDone, isLoading: context.isLoading });
-                    }, 15000);
-
+                    console.log("📢 `generate` has content! Waiting until 15s ends before updating `isLoading = false`...");
                 } else {
                     console.log("❌ `generate` is empty. Setting `isDone = true`...");
                     context.setIsDone(true);
-                    console.log("🔹 Context (Loading - No generate):", { isDone: context.isDone, isLoading: context.isLoading });
                 }
+    
+                // Ensure `isLoading` is only set to false AFTER 15s
+                setTimeout(() => {
+                    console.log("🛑 15s ended! Now setting `isDone = false` and `isLoading = false`.");
+                    context.setIsDone(false);
+                    context.setIsLoading(false);
+                    console.log("🔹 Context (After 15s):", { isDone: context.isDone, isLoading: context.isLoading });
+                }, 15000);
+    
             }, 15000);
         } catch (error) {
             console.error("❌ Error fetching ads:", error);
