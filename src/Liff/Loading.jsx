@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 const Loading = ({ isDone }) => {
     const [ads, setAds] = useState({});
     const [isWaiting, setIsWaiting] = useState(false);
-    let timeoutId;
+    const timeoutIdRef = useRef(null); // Store timeout ID across renders
 
     const fetchAds = async () => {
         if (isWaiting) return;
@@ -15,9 +15,9 @@ const Loading = ({ isDone }) => {
             console.log("Fetched Ads Data:", response.data);
             setAds(response.data);
 
-            timeoutId = setTimeout(() => {
+            timeoutIdRef.current = setTimeout(() => {
                 setIsWaiting(false);
-                fetchAds(); // Automatically fetch again after 15s
+                fetchAds(); // Schedule the next fetch
             }, 15000);
         } catch (error) {
             console.error("Error fetching ads:", error);
@@ -27,11 +27,13 @@ const Loading = ({ isDone }) => {
 
     useEffect(() => {
         if (!isDone) {
-            fetchAds();
+            fetchAds(); // Start fetching only if isDone is false
         }
 
         return () => {
-            clearTimeout(timeoutId);
+            if (timeoutIdRef.current) {
+                clearTimeout(timeoutIdRef.current); // Clean up timeout on unmount
+            }
         };
     }, [isDone]);
 
