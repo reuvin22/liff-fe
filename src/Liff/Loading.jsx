@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useAdsContext } from "../utils/context";
 
@@ -6,19 +6,23 @@ const Loading = ({ generate }) => {
     const [ads, setAds] = useState({});
     const [newAd, setNewAd] = useState(null);
     const [isWaiting, setIsWaiting] = useState(false);
-    const context = useAdsContext()
+    const context = useAdsContext();
+    const [counter, setCounter] = useState(15); // Initialize counter to 15
+
     useEffect(() => {
         let interval;
         let timeoutRef;
+        let countdownInterval;
 
         const fetchAds = async () => {
             try {
-                const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files")
+                const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
                 console.log("Fetched Ads Data:", response.data);
 
                 if (!isWaiting) {
                     setAds(response.data);
                     setIsWaiting(true);
+                    setCounter(15); // Reset counter when new ad is fetched
 
                     timeoutRef = setTimeout(() => {
                         setIsWaiting(false);
@@ -37,26 +41,36 @@ const Loading = ({ generate }) => {
             interval = setInterval(() => {
                 fetchAds();
             }, 15000);
-        }else if(generate){
-            if(interval){
-                setTimeout(() => 15000)
-            }
-        }else {
-            context.isLoading(false)
+        } else if (generate) {
+            setCounter(15); // Reset counter when generate is true
+            countdownInterval = setInterval(() => {
+                setCounter((prevCounter) => {
+                    if (prevCounter > 0) {
+                        console.log("Counter:", prevCounter - 1);
+                        return prevCounter - 1;
+                    } else {
+                        clearInterval(countdownInterval); // Clear the interval when counter reaches 0
+                        return 0;
+                    }
+                });
+            }, 1000);
+        } else {
+            context.isLoading(false);
         }
 
         return () => {
             clearInterval(interval);
             clearTimeout(timeoutRef);
+            clearInterval(countdownInterval); // Clear the countdown interval
         };
-    }, [generate]);
+    }, [generate, context]);
 
     useEffect(() => {
         if (!isWaiting && newAd) {
             setAds(newAd);
             setNewAd(null);
             setIsWaiting(true);
-
+            setCounter(15) // Reset counter when new ad is being set
             setTimeout(() => {
                 setIsWaiting(false);
             }, 15000);
@@ -86,7 +100,7 @@ const Loading = ({ generate }) => {
                             ></iframe>
                         )
                     ) : (
-                        <p>Please wait....</p>
+                        <p>Please wait.... {counter}</p>
                     )}
                 </div>
             </div>
