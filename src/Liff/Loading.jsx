@@ -21,33 +21,39 @@ const Loading = ({ generate }) => {
             setAds(response.data);
             setIsWaiting(true);
             setCounter(15);
-            context.setIsLoading(true); // Ensure loading is active until 15s ends
+            context.setIsLoading(true); // Ensure loading is active
     
             console.log("⏳ Playing ad for 15 seconds...");
     
+            let adPlayTime = 15000; // Force full 15s playback
+            let generateReceived = false;
+    
             timeoutRef.current = setTimeout(() => {
                 setIsWaiting(false);
+                console.log("🕒 15s finished, checking generate...");
     
                 if (generate) {
-                    console.log("📢 `generate` has content! Waiting until 15s ends before updating `isLoading = false`...");
+                    console.log("📢 `generate` has content! Ensuring full 15s playback before setting `isLoading = false`...");
+                    generateReceived = true;
                 } else {
                     console.log("❌ `generate` is empty. Setting `isDone = true`...");
                     context.setIsDone(true);
                 }
     
-                // Ensure `isLoading` is only set to false AFTER 15s
+                // Guarantee `isLoading = false` only **after** 15 seconds
                 setTimeout(() => {
                     console.log("🛑 15s ended! Now setting `isDone = false` and `isLoading = false`.");
                     context.setIsDone(false);
                     context.setIsLoading(false);
                     console.log("🔹 Context (After 15s):", { isDone: context.isDone, isLoading: context.isLoading });
-                }, 15000);
+                }, adPlayTime);
     
-            }, 15000);
+            }, adPlayTime);
+    
         } catch (error) {
             console.error("❌ Error fetching ads:", error);
         }
-    };
+    };    
 
     useEffect(() => {
         fetchAds();
