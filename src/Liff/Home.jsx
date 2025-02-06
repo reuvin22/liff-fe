@@ -334,7 +334,7 @@ const Home = () => {
       />
     }
     if (isLoading) {
-      return <Loading isDone={isDone}/>;
+      return <Loading isDone={isDone} onLoadingComplete={() => setIsLoading(false)} />;
     }
 
     const popUpAdvice = () => {
