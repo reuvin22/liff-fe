@@ -3,12 +3,13 @@ import Home from './Liff/Home'
 import Carousel from './Liff/how-to-use/Carousel'
 import { AdsContext } from './utils/context'
 function App() {
+  const [isDone, setIsDone] = useState(false);
   return (
     <>
       <Routes>
-        <AdsContext>
+        <AdsContext.Provider value={{ isDone, setIsDone }}>
           <Route path="/" element={<Home />} />
-        </AdsContext>
+        </AdsContext.Provider>
         <Route path='/explanation' element={<Carousel />} />
       </Routes>
     </>

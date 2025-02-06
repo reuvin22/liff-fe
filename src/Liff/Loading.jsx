@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useAdsContext } from "../utils/context";
 
-const Loading = () => {
+const Loading = ({ generate }) => {
     const [ads, setAds] = useState(null);
     const [isWaiting, setIsWaiting] = useState(false);
     const [counter, setCounter] = useState(15);
@@ -13,22 +13,33 @@ const Loading = () => {
     const fetchAds = async () => {
         if (isWaiting) return;
 
-        console.log("Fetching new ad in 3...2...1...");
+        console.log("🚀 Fetching new ad in 3...2...1...");
         try {
             const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
-            console.log("Fetched Ads Data:", response.data);
+            console.log("✅ Fetched Ads Data:", response.data);
 
             setAds(response.data);
-            context.setIsDone(false);
             setIsWaiting(true);
             setCounter(15);
 
+            console.log("⏳ Playing ad for 15 seconds...");
+
             timeoutRef.current = setTimeout(() => {
                 setIsWaiting(false);
-                context.setIsDone(true);
+
+                if (generate) {
+                    console.log("📢 `generate` has content! Waiting for 15s before setting `isDone` to false...");
+                    setTimeout(() => {
+                        console.log("🛑 15s ended! Now hiding ads (isDone = false).");
+                        context.setIsDone(false);
+                    }, 15000);
+                } else {
+                    console.log("❌ `generate` is still empty. Setting `isDone` to true and fetching more ads...");
+                    context.setIsDone(true);
+                }
             }, 15000);
         } catch (error) {
-            console.error("Error fetching ads:", error);
+            console.error("❌ Error fetching ads:", error);
         }
     };
 
@@ -37,7 +48,7 @@ const Loading = () => {
 
         intervalRef.current = setInterval(() => {
             setCounter((prev) => {
-                console.log(`Next API fetch in: ${prev} seconds`);
+                console.log(`⏳ Countdown: ${prev} seconds remaining`);
                 if (prev <= 1) {
                     fetchAds();
                     return 15;
@@ -47,6 +58,7 @@ const Loading = () => {
         }, 1000);
 
         return () => {
+            console.log("🧹 Cleaning up timeouts and intervals...");
             clearInterval(intervalRef.current);
             clearTimeout(timeoutRef.current);
         };
@@ -56,7 +68,7 @@ const Loading = () => {
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
             <div className="bg-white w-80 rounded-lg shadow-lg p-4 text-center">
                 <div className="border-2 border-black mt-1 bg-gray-300 mb-2">
-                    {isDone ? "文章の作成が完了しました" : "Loading new ad..."}
+                    {context.isDone ? "文章の作成が完了しました" : "Loading new ad..."}
                 </div>
                 <p className="text-sm font-medium text-gray-700">
                     Next ad fetch in: {counter} seconds

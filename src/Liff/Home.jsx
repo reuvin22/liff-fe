@@ -281,61 +281,55 @@ const Home = () => {
     }, [userId]);
   
     const handleSubmit = async () => {
-      console.log(formData);
-      setIsLoading(true);
-      context.setIsDone(false);
-  
-      let timeoutFlag = false;
-  
-      const timeout = setTimeout(() => {
-          timeoutFlag = true;
-          context.setIsDone(true)
-      }, 6000);
-  
-      try {
-        const postResponse = await axios.post(
-            "https://reuvindevs.com/liff/public/api/answers",
-            formData,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        );
-  
-          clearTimeout(timeout);
-  
-          if (
-              postResponse.data.openai === "申し訳ありませんが、そのリクエストには対応できません。" ||
-              postResponse.data.openai === "申し訳ございませんが、このリクエストを処理することはできません。"
-          ) {
-              setHasError(true);
-          }
-          if (postResponse.status === 200) {
-              console.log(postResponse.data.openai);
-              setOptionComponent(true);
-              setPrompt(postResponse.data.openai);
-          } else {
-              console.error("Submission failed: ", postResponse.data);
-          }
-      } catch (error) {
-          console.error("Error during submission or fetching prompt:", error);
-          alert("An error occurred while processing your request.");
-      } finally {
-          setIsLoading(false);
-      }
-  };
+        console.log(formData);
+        setIsLoading(true);
+        context.setIsDone(false);
     
-    if(optionComponent){
-      return <Option 
-        prompt={prompt}
-        userId={userId}
-      />
+        const timeout = setTimeout(() => {
+            context.setIsDone(true);
+        }, 6000);
+    
+        try {
+            const postResponse = await axios.post(
+                "https://reuvindevs.com/liff/public/api/answers",
+                formData,
+                {
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
+    
+            clearTimeout(timeout);
+    
+            if (
+                postResponse.data.openai === "申し訳ありませんが、そのリクエストには対応できません。" ||
+                postResponse.data.openai === "申し訳ございませんが、このリクエストを処理することはできません。"
+            ) {
+                setHasError(true);
+            }
+    
+            if (postResponse.status === 200) {
+                console.log(postResponse.data.openai);
+                setOptionComponent(true);
+                setPrompt(postResponse.data.openai);
+                context.setIsDone(true);
+            } else {
+                console.error("Submission failed: ", postResponse.data);
+            }
+        } catch (error) {
+            console.error("Error during submission or fetching prompt:", error);
+            alert("An error occurred while processing your request.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
+    if (optionComponent) {
+        return <Option prompt={prompt} userId={userId} />;
     }
     
     if (isLoading) {
-      return <Loading/>;
-    }
+        return <Loading generate={prompt}/>;
+    }  
 
     const popUpAdvice = () => {
         setShowAdvice(!showAdvice)
