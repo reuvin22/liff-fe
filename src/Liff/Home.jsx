@@ -329,7 +329,7 @@ const Home = () => {
       />
     }
     if (context.isLoading) {
-      return <Loading generate={prompt}/>;
+      return <Loading generate={prompt} isDone={isDone}/>;
     }
 
     const popUpAdvice = () => {
