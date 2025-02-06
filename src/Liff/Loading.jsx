@@ -4,40 +4,33 @@ import axios from "axios";
 const Loading = ({ isDone }) => {
     const [ads, setAds] = useState({});
     const [isWaiting, setIsWaiting] = useState(false);
+    let timeoutId;
+
+    const fetchAds = async () => {
+        if (isWaiting) return;
+
+        try {
+            setIsWaiting(true);
+            const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
+            console.log("Fetched Ads Data:", response.data);
+            setAds(response.data);
+
+            timeoutId = setTimeout(() => {
+                setIsWaiting(false);
+                fetchAds(); // Automatically fetch again after 15s
+            }, 15000);
+        } catch (error) {
+            console.error("Error fetching ads:", error);
+            setIsWaiting(false);
+        }
+    };
 
     useEffect(() => {
-        let intervalId;
-        let timeoutId;
-
-        const fetchAds = async () => {
-            if (isWaiting) return;
-
-            try {
-                setIsWaiting(true);
-                const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
-                console.log("Fetched Ads Data:", response.data);
-                setAds(response.data);
-
-                timeoutId = setTimeout(() => {
-                    setIsWaiting(false);
-                }, 15000);
-            } catch (error) {
-                console.error("Error fetching ads:", error);
-                setIsWaiting(false);
-            }
-        };
-
-        if (isDone) {
+        if (!isDone) {
             fetchAds();
-        } else {
-            fetchAds();
-            intervalId = setInterval(() => {
-                fetchAds();
-            }, 15000);
         }
 
         return () => {
-            clearInterval(intervalId);
             clearTimeout(timeoutId);
         };
     }, [isDone]);
