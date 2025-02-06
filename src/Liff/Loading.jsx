@@ -9,7 +9,7 @@ const Loading = ({ generate }) => {
     const timeoutRef = useRef(null);
     const intervalRef = useRef(null);
     const context = useAdsContext();
-
+    const [end, setEnd] = useState(false)
     const fetchAds = async () => {
         if (isWaiting) return;
     
@@ -21,11 +21,11 @@ const Loading = ({ generate }) => {
             setAds(response.data);
             setIsWaiting(true);
             setCounter(15);
-            context.setIsLoading(true); // Ensure loading is active
+            context.setIsLoading(true);
     
             console.log("⏳ Playing ad for 15 seconds...");
     
-            let adPlayTime = 15000; // Force full 15s playback
+            let adPlayTime = 15000;
             let generateReceived = false;
     
             timeoutRef.current = setTimeout(() => {
@@ -37,17 +37,15 @@ const Loading = ({ generate }) => {
                     generateReceived = true;
                 } else {
                     console.log("❌ `generate` is empty. Setting `isDone = true`...");
-                    context.setIsDone(true);
                 }
     
-                // Guarantee `isLoading = false` only **after** 15 seconds
                 setTimeout(() => {
                     console.log("🛑 15s ended! Now setting `isDone = false` and `isLoading = false`.");
-                    context.setIsDone(false);
-                    context.setIsLoading(false);
-                    console.log("🔹 Context (After 15s):", { isDone: context.isDone, isLoading: context.isLoading });
+
+                    console.log("🔹 Context (After 15s):", { isLoading: context.isLoading });
                 }, adPlayTime);
-    
+                
+                setEnd(true)
             }, adPlayTime);
     
         } catch (error) {

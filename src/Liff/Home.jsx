@@ -23,7 +23,6 @@ const Home = () => {
     const [prompt, setPrompt] = useState("")
     const [questionList, setQuestionList] = useState([])
     const [writingAdvice, setWritingAdvice] = useState([])
-    const [isDone, setIsDone] = useState(false)
     const context = useAdsContext();
     const maxInput =
     progress === 3 || progress === 4 || progress === 5
@@ -284,13 +283,11 @@ const Home = () => {
     const handleSubmit = async () => {
       console.log(formData);
       context.setIsLoading(true);
-      setIsDone(false);
   
       let timeoutFlag = false;
   
       const timeout = setTimeout(() => {
           timeoutFlag = true;
-          setIsDone(true)
       }, 6000);
   
       try {
@@ -313,11 +310,9 @@ const Home = () => {
               setHasError(true);
           }
           if (postResponse.status === 200) {
-              setIsDone(false)
               console.log(postResponse.data.openai);
               setOptionComponent(true);
               setPrompt(postResponse.data.openai);
-              setIsDone(true);
           } else {
               console.error("Submission failed: ", postResponse.data);
           }
@@ -334,7 +329,7 @@ const Home = () => {
       />
     }
     if (context.isLoading) {
-      return <Loading isDone={isDone}/>;
+      return <Loading generate={prompt}/>;
     }
 
     const popUpAdvice = () => {
