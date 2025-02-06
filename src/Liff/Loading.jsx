@@ -1,14 +1,14 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AppContext } from "../context/AppContext"; // Assuming context for isLoading
+import { useAdsContext } from "../utils/context";
 
 const Loading = ({ generate }) => {
-    const { isLoading, setIsLoading } = useContext(AppContext);
     const [ads, setAds] = useState(null);
     const [newAd, setNewAd] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [countdown, setCountdown] = useState(15); // Countdown timer
-
+    const context = useAdsContext();
     useEffect(() => {
         let timeoutRef;
         let intervalRef;
@@ -22,7 +22,7 @@ const Loading = ({ generate }) => {
                     setAds(response.data);
                     setIsPlaying(true);
                     setCountdown(15); // Reset countdown
-                    setIsLoading(true); // Start loading state
+                    context.setIsLoading(true); // Start loading state
                     console.log("Ad started playing. Countdown set to 15 seconds.");
 
                     // Start countdown timer
@@ -36,10 +36,10 @@ const Loading = ({ generate }) => {
                     // Ensure ad plays for 15 seconds
                     timeoutRef = setTimeout(() => {
                         setIsPlaying(false);
-                        setIsLoading(false); // Set loading to false after 15 sec
+                        context.setIsLoading(false); // Set loading to false after 15 sec
                         clearInterval(intervalRef); // Stop countdown
                         console.log("Ad finished playing. Countdown stopped.");
-                        console.log("context.isLoading:", isLoading);
+                        console.log("context.isLoading:", context.isLoading);
                     }, 15000);
                 } else {
                     setNewAd(response.data); // Queue new ad if one is playing
@@ -52,7 +52,7 @@ const Loading = ({ generate }) => {
 
         if (generate) {
             console.log("Generate is populated. Generate Data:", generate);
-            console.log("context.isLoading:", isLoading);
+            console.log("context.isLoading:", context.isLoading);
         }
 
         fetchAds();
@@ -70,7 +70,7 @@ const Loading = ({ generate }) => {
             setNewAd(null);
             setIsPlaying(true);
             setCountdown(15);
-            setIsLoading(true);
+            context.setIsLoading(true);
 
             let intervalRef = setInterval(() => {
                 setCountdown((prev) => {
@@ -81,7 +81,7 @@ const Loading = ({ generate }) => {
 
             setTimeout(() => {
                 setIsPlaying(false);
-                setIsLoading(false);
+                context.setIsLoading(false);
                 clearInterval(intervalRef);
                 console.log("Queued ad finished playing. Countdown stopped.");
                 console.log("context.isLoading:", isLoading);
