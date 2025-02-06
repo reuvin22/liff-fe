@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { useAdsContext } from "../utils/context";
 
-const Loading = ({ isDone, onLoadingComplete }) => {
+const Loading = () => {
     const [ads, setAds] = useState(null);
     const [isWaiting, setIsWaiting] = useState(false);
     const [counter, setCounter] = useState(15);
     const timeoutRef = useRef(null);
     const intervalRef = useRef(null);
+    const context = useAdsContext();
 
     const fetchAds = async () => {
         if (isWaiting) return;
@@ -17,14 +19,13 @@ const Loading = ({ isDone, onLoadingComplete }) => {
             console.log("Fetched Ads Data:", response.data);
 
             setAds(response.data);
+            context.setIsDone(false);
             setIsWaiting(true);
             setCounter(15);
 
             timeoutRef.current = setTimeout(() => {
                 setIsWaiting(false);
-                if (isDone) {
-                    onLoadingComplete();
-                }
+                context.setIsDone(true);
             }, 15000);
         } catch (error) {
             console.error("Error fetching ads:", error);
@@ -55,7 +56,7 @@ const Loading = ({ isDone, onLoadingComplete }) => {
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
             <div className="bg-white w-80 rounded-lg shadow-lg p-4 text-center">
                 <div className="border-2 border-black mt-1 bg-gray-300 mb-2">
-                    文章の作成が完了しました
+                    {isDone ? "文章の作成が完了しました" : "Loading new ad..."}
                 </div>
                 <p className="text-sm font-medium text-gray-700">
                     Next ad fetch in: {counter} seconds

@@ -7,7 +7,9 @@ import LoadingError from "./LoadingError";
 import Generate from "./Generate";
 import Option from "./Option";
 import HomeLoading from "./HomeLoading";
+import { useAdsContext } from "../utils/context";
 const Home = () => {
+    const context = useAdsContext()
     const [progress, setProgress] = useState(1);
     const [currentStep, setCurrentStep] = useState(1);
     const [totalSteps] = useState(14);
@@ -22,7 +24,6 @@ const Home = () => {
     const [prompt, setPrompt] = useState("")
     const [questionList, setQuestionList] = useState([])
     const [writingAdvice, setWritingAdvice] = useState([])
-    const [isDone, setIsDone] = useState(false)
     const maxInput =
     progress === 3 || progress === 4 || progress === 5
       ? 100
@@ -282,13 +283,13 @@ const Home = () => {
     const handleSubmit = async () => {
       console.log(formData);
       setIsLoading(true);
-      setIsDone(false);
+      context.setIsDone(false);
   
       let timeoutFlag = false;
   
       const timeout = setTimeout(() => {
           timeoutFlag = true;
-          setIsDone(true)
+          context.setIsDone(true)
       }, 6000);
   
       try {
@@ -314,7 +315,6 @@ const Home = () => {
               console.log(postResponse.data.openai);
               setOptionComponent(true);
               setPrompt(postResponse.data.openai);
-              setIsDone(false)
           } else {
               console.error("Submission failed: ", postResponse.data);
           }
@@ -332,8 +332,9 @@ const Home = () => {
         userId={userId}
       />
     }
+    
     if (isLoading) {
-      return <Loading isDone={isDone}/>;
+      return <Loading/>;
     }
 
     const popUpAdvice = () => {
