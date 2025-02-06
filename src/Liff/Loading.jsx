@@ -15,45 +15,49 @@ const Loading = ({ generate }) => {
         let intervalRef;
 
         const fetchAds = async () => {
+            if (isWaiting) return;
+        
+            console.log("🚀 Fetching new ad...");
             try {
                 const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
-                console.log("Fetched Ads Data:", response.data);
-
-                if (!isPlaying) {
-                    setAds(response.data);
-                    setIsPlaying(true);
-                    setCountdown(15); // Reset countdown
-                    context.setIsLoading(true); // Start loading state
-                    console.log("Ad started playing. Countdown set to 15 seconds.");
-
-                    // Start countdown timer
-                    intervalRef = setInterval(() => {
-                        setCountdown((prev) => {
-                            if (prev > 1) {
-                                console.log("Current Countdown:", prev - 1);
-                            } else {
-                                console.log("Current Countdown: 0 (Ad about to finish)");
-                            }
-                            return prev > 0 ? prev - 1 : 0;
-                        });
-                    }, 1000);
-
-                    // Ensure ad plays for 15 seconds
-                    timeoutRef = setTimeout(() => {
-                        setIsPlaying(false);
-                        context.setIsLoading(false); // Set loading to false after 15 sec
-                        clearInterval(intervalRef); // Stop countdown
-                        console.log("Ad finished playing. Countdown stopped.");
-                        console.log("context.isLoading:", context.isLoading);
-                    }, 15000);
-                } else {
-                    setNewAd(response.data); // Queue new ad if one is playing
-                    console.log("New ad fetched and queued.");
-                }
+                console.log("✅ Fetched Ads Data:", response.data);
+        
+                setAds(response.data);
+                setIsWaiting(true);
+                setCounter(15);
+                context.setIsLoading(true); // Ensure loading is active
+        
+                console.log("⏳ Playing ad for 15 seconds...");
+        
+                let adPlayTime = 15000; // Force full 15s playback
+                let generateReceived = false;
+        
+                timeoutRef.current = setTimeout(() => {
+                    setIsWaiting(false);
+                    console.log("🕒 15s finished, checking generate...");
+        
+                    if (generate) {
+                        console.log("📢 `generate` has content! Ensuring full 15s playback before setting `isLoading = false`...");
+                        generateReceived = true;
+                    } else {
+                        console.log("❌ `generate` is empty. Setting `isDone = true`...");
+                        context.setIsDone(true);
+                    }
+        
+                    // Guarantee `isLoading = false` only **after** 15 seconds
+                    setTimeout(() => {
+                        console.log("🛑 15s ended! Now setting `isDone = false` and `isLoading = false`.");
+                        context.setIsDone(false);
+                        context.setIsLoading(false);
+                        console.log("🔹 Context (After 15s):", { isDone: context.isDone, isLoading: context.isLoading });
+                    }, adPlayTime);
+        
+                }, adPlayTime);
+        
             } catch (error) {
-                console.error("Error fetching ads:", error);
+                console.error("❌ Error fetching ads:", error);
             }
-        };
+        };        
 
         if (generate) {
             console.log("Generate is populated. Generate Data:", generate);
