@@ -309,8 +309,6 @@ const Home = () => {
               setHasError(true);
           }
           if (postResponse.status === 200) {
-              console.log(postResponse.data.openai);
-              setOptionComponent(true);
               setPrompt(postResponse.data.openai);
           } else {
               console.error("Submission failed: ", postResponse.data);
@@ -321,7 +319,8 @@ const Home = () => {
       }
   };
     
-    if(context.isLoading === false){
+    console.log('THIS IS IS READY: ', context.isReady)
+    if(context.isReady === true){
       return <Option 
         prompt={prompt}
         userId={userId}

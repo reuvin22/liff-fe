@@ -6,11 +6,12 @@ import { useState } from 'react';
 function App() {
   const [isDone, setIsDone] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   console.log('APP.jsx isDone value = ', isDone);
   console.log('APP.jsx isDone Loading = ', isLoading);
   return (
     <>
-      <AdsContext.Provider value={{ isDone, setIsDone, isLoading, setIsLoading }}>
+      <AdsContext.Provider value={{ isDone, setIsDone, isLoading, setIsLoading, isReady, setIsReady }}>
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path='/explanation' element={<Carousel />} />

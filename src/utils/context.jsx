@@ -4,7 +4,9 @@ export const AdsContext = createContext({
     isDone: false,
     setIsDone: () => {},
     isLoading: false,
-    setIsLoading: () => {}
+    setIsLoading: () => {},
+    isReady: false,
+    setIsReady: () => {}
 });
 
 export const useAdsContext = () => useContext(AdsContext);
