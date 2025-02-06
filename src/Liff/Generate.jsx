@@ -17,7 +17,6 @@ function Generate({prompt, userId}) {
     const [copy, setCopy] = useState(false)
     const context = useAdsContext()
     const handleCompress = () => {
-        context.setIsLoading(true)
         axios.get(
             `https://reuvindevs.com/liff/public/api/compress/${userId}`
         ).then((response) => {
