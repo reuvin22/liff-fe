@@ -321,7 +321,7 @@ const Home = () => {
       }
   };
     
-    if(optionComponent && context.isLoading === false){
+    if(context.isLoading === false){
       return <Option 
         prompt={prompt}
         userId={userId}

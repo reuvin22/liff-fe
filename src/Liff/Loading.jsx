@@ -23,10 +23,14 @@ const Loading = ({ generate }) => {
                     setIsPlaying(true);
                     setCountdown(15); // Reset countdown
                     setIsLoading(true); // Start loading state
+                    console.log("Ad started playing. Countdown set to 15 seconds.");
 
                     // Start countdown timer
                     intervalRef = setInterval(() => {
-                        setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
+                        setCountdown((prev) => {
+                            console.log("Current Countdown:", prev - 1);
+                            return prev > 0 ? prev - 1 : 0;
+                        });
                     }, 1000);
 
                     // Ensure ad plays for 15 seconds
@@ -34,9 +38,12 @@ const Loading = ({ generate }) => {
                         setIsPlaying(false);
                         setIsLoading(false); // Set loading to false after 15 sec
                         clearInterval(intervalRef); // Stop countdown
+                        console.log("Ad finished playing. Countdown stopped.");
+                        console.log("context.isLoading:", isLoading);
                     }, 15000);
                 } else {
                     setNewAd(response.data); // Queue new ad if one is playing
+                    console.log("New ad fetched and queued.");
                 }
             } catch (error) {
                 console.error("Error fetching ads:", error);
@@ -44,7 +51,8 @@ const Loading = ({ generate }) => {
         };
 
         if (generate) {
-            console.log("Generate is populated, context.isLoading:", isLoading);
+            console.log("Generate is populated. Generate Data:", generate);
+            console.log("context.isLoading:", isLoading);
         }
 
         fetchAds();
@@ -57,6 +65,7 @@ const Loading = ({ generate }) => {
 
     useEffect(() => {
         if (!isPlaying && newAd) {
+            console.log("Playing the queued ad.");
             setAds(newAd);
             setNewAd(null);
             setIsPlaying(true);
@@ -64,13 +73,18 @@ const Loading = ({ generate }) => {
             setIsLoading(true);
 
             let intervalRef = setInterval(() => {
-                setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
+                setCountdown((prev) => {
+                    console.log("Current Countdown:", prev - 1);
+                    return prev > 0 ? prev - 1 : 0;
+                });
             }, 1000);
 
             setTimeout(() => {
                 setIsPlaying(false);
                 setIsLoading(false);
                 clearInterval(intervalRef);
+                console.log("Queued ad finished playing. Countdown stopped.");
+                console.log("context.isLoading:", isLoading);
             }, 15000);
         }
     }, [isPlaying, newAd]);
