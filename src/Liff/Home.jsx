@@ -9,7 +9,6 @@ import Option from "./Option";
 import HomeLoading from "./HomeLoading";
 import { useAdsContext } from "../utils/context";
 const Home = () => {
-    const context = useAdsContext()
     const [progress, setProgress] = useState(1);
     const [currentStep, setCurrentStep] = useState(1);
     const [totalSteps] = useState(14);
@@ -24,6 +23,8 @@ const Home = () => {
     const [prompt, setPrompt] = useState("")
     const [questionList, setQuestionList] = useState([])
     const [writingAdvice, setWritingAdvice] = useState([])
+    const [isDone, setIsDone] = useState(false)
+    const context = useAdsContext();
     const maxInput =
     progress === 3 || progress === 4 || progress === 5
       ? 100
@@ -281,24 +282,27 @@ const Home = () => {
     }, [userId]);
   
     const handleSubmit = async () => {
-      console.log("🔹 Form Data:", formData);
+      console.log(formData);
       context.setIsLoading(true);
-      context.setIsDone(false);
-      console.log("🔹 Context value before API call (Home):", context.isDone);
+      setIsDone(false);
+  
+      let timeoutFlag = false;
   
       const timeout = setTimeout(() => {
-          context.setIsDone(true);
-          console.log("🔹 Timeout reached: `isDone` set to true (Home)");
+          timeoutFlag = true;
+          setIsDone(true)
       }, 6000);
   
       try {
-          const postResponse = await axios.post(
-              "https://reuvindevs.com/liff/public/api/answers",
-              formData,
-              {
-                  headers: { "Content-Type": "application/json" },
-              }
-          );
+        const postResponse = await axios.post(
+            "https://reuvindevs.com/liff/public/api/answers",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
   
           clearTimeout(timeout);
   
@@ -308,28 +312,30 @@ const Home = () => {
           ) {
               setHasError(true);
           }
-  
           if (postResponse.status === 200) {
-              console.log("✅ API Response:", postResponse.data.openai);
+              setIsDone(false)
+              console.log(postResponse.data.openai);
               setOptionComponent(true);
               setPrompt(postResponse.data.openai);
-              console.log("🔹 Context value after API call (Home):", context.isDone);
+              setIsDone(true);
           } else {
-              console.error("❌ Submission failed: ", postResponse.data);
+              console.error("Submission failed: ", postResponse.data);
           }
       } catch (error) {
-          console.error("❌ Error during submission:", error);
+          console.error("Error during submission or fetching prompt:", error);
           alert("An error occurred while processing your request.");
       }
-  };  
+  };
     
-    if (optionComponent) {
-        return <Option prompt={prompt} userId={userId} />;
+    if(optionComponent){
+      return <Option 
+        prompt={prompt}
+        userId={userId}
+      />
     }
-    
     if (context.isLoading) {
-        return <Loading generate={prompt}/>;
-    }  
+      return <Loading isDone={isDone}/>;
+    }
 
     const popUpAdvice = () => {
         setShowAdvice(!showAdvice)
