@@ -38,19 +38,21 @@ const Loading = ({ generate }) => {
             }
         };
 
-        if (!isDone) {
+        if (!generate) {
             fetchAds();
 
             interval = setInterval(() => {
                 fetchAds();
             }, 15000);
+        }else {
+            context.setIsLoading(false)
         }
         
         return () => {
             clearInterval(interval);
             clearTimeout(timeoutRef);
         };
-    }, [isDone]);
+    }, []);
 
     useEffect(() => {
         if (!isWaiting && newAd) {
