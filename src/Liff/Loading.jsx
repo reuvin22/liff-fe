@@ -13,17 +13,17 @@ const Loading = ({ generate }) => {
         let interval;
         let timeoutRef;
         let countdownInterval;
-
+    
         const fetchAds = async () => {
             try {
                 const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
                 console.log("Fetched Ads Data:", response.data);
-
+    
                 if (!isWaiting) {
                     setAds(response.data);
                     setIsWaiting(true);
                     setCounter(15); // Reset counter when new ad is fetched
-
+    
                     timeoutRef = setTimeout(() => {
                         setIsWaiting(false);
                     }, 15000);
@@ -34,36 +34,37 @@ const Loading = ({ generate }) => {
                 console.error("Error fetching ads:", error);
             }
         };
-
+    
         if (!generate) {
             fetchAds();
-
+    
             interval = setInterval(() => {
                 fetchAds();
             }, 15000);
-        } else if (generate) {
-            setCounter(15); // Reset counter when generate is true
+        } else {
+            setCounter(15); // Reset counter when generate is triggered
+    
             countdownInterval = setInterval(() => {
                 setCounter((prevCounter) => {
                     if (prevCounter > 0) {
                         console.log("Counter:", prevCounter - 1);
                         return prevCounter - 1;
                     } else {
-                        clearInterval(countdownInterval); // Clear the interval when counter reaches 0
+                        clearInterval(countdownInterval); // Ensure countdown stops at 0
                         return 0;
                     }
                 });
             }, 1000);
-        } else {
-            context.isLoading(false);
         }
-
+    
         return () => {
-            clearInterval(interval);
-            clearTimeout(timeoutRef);
-            clearInterval(countdownInterval); // Clear the countdown interval
+            if (!generate) {
+                clearInterval(interval);
+                clearTimeout(timeoutRef);
+            }
+            clearInterval(countdownInterval); // Ensure countdown stops only when needed
         };
-    }, [generate, context]);
+    }, [generate]);  // Removed context from dependencies to prevent unnecessary re-runs    
 
     useEffect(() => {
         if (!isWaiting && newAd) {
