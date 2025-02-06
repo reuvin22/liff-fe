@@ -1,9 +1,10 @@
-import React from 'react'
-import { createContext, useContext } from 'react'
+import React, { createContext, useContext, useState } from 'react';
 
 export const AdsContext = createContext({
     isDone: false,
-    setIsDone: () => {}
+    setIsDone: () => {},
+    isAdPlaying: false,
+    setIsAdPlaying: () => {},
 });
 
-export const useAdsContext = () => useContext(AdsContext)
+export const useAdsContext = () => useContext(AdsContext);

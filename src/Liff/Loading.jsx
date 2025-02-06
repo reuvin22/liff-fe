@@ -8,7 +8,8 @@ const Loading = () => {
     const [counter, setCounter] = useState(15);
     const timeoutRef = useRef(null);
     const intervalRef = useRef(null);
-    const context = useAdsContext();
+
+    const { isDone, setIsDone, isAdPlaying, setIsAdPlaying } = useAdsContext();
 
     const fetchAds = async () => {
         if (isWaiting) return;
@@ -19,13 +20,17 @@ const Loading = () => {
             console.log("Fetched Ads Data:", response.data);
 
             setAds(response.data);
-            context.setIsDone(false);
             setIsWaiting(true);
             setCounter(15);
+            setIsAdPlaying(true); // Mark ad as playing
+            setIsDone(false); // Reset isDone to ensure the ad plays for 15s
 
             timeoutRef.current = setTimeout(() => {
                 setIsWaiting(false);
-                context.setIsDone(true);
+                setIsAdPlaying(false); // Mark ad as finished playing
+                if (isDone) {
+                    setIsDone(true); // Only remove loading if OpenAI is also done
+                }
             }, 15000);
         } catch (error) {
             console.error("Error fetching ads:", error);
@@ -56,7 +61,7 @@ const Loading = () => {
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
             <div className="bg-white w-80 rounded-lg shadow-lg p-4 text-center">
                 <div className="border-2 border-black mt-1 bg-gray-300 mb-2">
-                    {isDone ? "文章の作成が完了しました" : "Loading new ad..."}
+                    {isDone && !isAdPlaying ? "文章の作成が完了しました" : "Loading new ad..."}
                 </div>
                 <p className="text-sm font-medium text-gray-700">
                     Next ad fetch in: {counter} seconds
