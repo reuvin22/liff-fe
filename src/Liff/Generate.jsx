@@ -18,7 +18,7 @@ function Generate({prompt, userId}) {
     const context = useAdsContext()
 
     const handleCompress = () => {
-        setIsLoading(true); // Show Loading component
+        context.setIsLoading(true);
     
         axios.get(`https://reuvindevs.com/liff/public/api/compress/${userId}`)
             .then((response) => {
@@ -31,7 +31,7 @@ function Generate({prompt, userId}) {
     
                 setTimeout(() => {
                     setIsCompress(true);
-                    setIsLoading(false);
+                    context.setIsLoading(false);
                 }, 1500);
             })
             .catch((error) => {
@@ -61,7 +61,7 @@ function Generate({prompt, userId}) {
             userId = {userId}
         />
     }
-    if(isLoading === true){
+    if(context.isLoading === true){
         return <Loading />;
     }
 
