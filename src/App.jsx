@@ -5,6 +5,7 @@ import { AdsContext } from './utils/context'
 import { useState } from 'react';
 function App() {
   const [isDone, setIsDone] = useState(false);
+  console.log('APP.jsx isDone value = ', isDone);
   return (
     <>
       <AdsContext.Provider value={{ isDone, setIsDone }}>
