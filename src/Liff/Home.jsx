@@ -9,7 +9,7 @@ import Option from "./Option";
 import HomeLoading from "./HomeLoading";
 import { useAdsContext } from "../utils/context";
 const Home = () => {
-    const { isDone, setIsDone, isAdPlaying } = useAdsContext();
+    const context = useAdsContext()
     const [progress, setProgress] = useState(1);
     const [currentStep, setCurrentStep] = useState(1);
     const [totalSteps] = useState(14);
@@ -283,36 +283,48 @@ const Home = () => {
     const handleSubmit = async () => {
       console.log(formData);
       setIsLoading(true);
-      setIsDone(false); // Reset isDone before API request starts
+      context.setIsDone(false);
   
-      setTimeout(() => {
-          setIsDone(true);
+      let timeoutFlag = false;
+  
+      const timeout = setTimeout(() => {
+          timeoutFlag = true;
+          context.setIsDone(true)
       }, 6000);
   
       try {
-          const postResponse = await axios.post(
-              "https://reuvindevs.com/liff/public/api/answers",
-              formData,
-              {
-                  headers: {
-                      "Content-Type": "application/json",
-                  },
-              }
-          );
+        const postResponse = await axios.post(
+            "https://reuvindevs.com/liff/public/api/answers",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
   
+          clearTimeout(timeout);
+  
+          if (
+              postResponse.data.openai === "申し訳ありませんが、そのリクエストには対応できません。" ||
+              postResponse.data.openai === "申し訳ございませんが、このリクエストを処理することはできません。"
+          ) {
+              setHasError(true);
+          }
           if (postResponse.status === 200) {
               console.log(postResponse.data.openai);
               setOptionComponent(true);
               setPrompt(postResponse.data.openai);
+          } else {
+              console.error("Submission failed: ", postResponse.data);
           }
       } catch (error) {
-          console.error("Error during submission:", error);
+          console.error("Error during submission or fetching prompt:", error);
           alert("An error occurred while processing your request.");
       } finally {
           setIsLoading(false);
       }
   };
-  
     
     if(optionComponent){
       return <Option 
@@ -321,8 +333,8 @@ const Home = () => {
       />
     }
     
-    if (isLoading || !isDone || isAdPlaying) {
-      return <Loading />;
+    if (isLoading) {
+      return <Loading/>;
     }
 
     const popUpAdvice = () => {
