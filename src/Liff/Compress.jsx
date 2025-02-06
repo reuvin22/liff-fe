@@ -4,6 +4,7 @@ import Loading from './Loading';
 import Generate from './Generate';
 import LoadingError from './LoadingError';
 import liff from '@line/liff';
+import { useAdsContext } from '../utils/context';
 function Compress({prompt, userId}) {
     const [copyStatus, setCopyStatus] = useState("");
     const [generate, setGenerate] = useState("");
@@ -14,7 +15,7 @@ function Compress({prompt, userId}) {
     const [compressData, setCompressData] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [copy, setCopy] = useState(false)
-
+    const context = useAdsContext()
     function backToHome() {
         if (liff.isInClient()) {
           liff.closeWindow();
@@ -47,8 +48,8 @@ function Compress({prompt, userId}) {
             userId={userId}
         />
     }
-    if(isLoading){
-        return <Loading />
+    if(context.isLoading){
+        return <Loading generate={generate}/>
     }
 
     const handleCopy = () => {
