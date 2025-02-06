@@ -14,6 +14,7 @@ function Generate({prompt, userId}) {
     const [isLoading, setIsLoading] = useState(false)
     const [home, setHome] = useState(false)
     const [copy, setCopy] = useState(false)
+    const [isDone, setIsDone] = useState(false)
     const handleCompress = () => {
         setIsLoading(true)
         axios.get(
@@ -54,7 +55,7 @@ function Generate({prompt, userId}) {
         />
     }
     if(isLoading){
-        return <Loading />
+        return <Loading onLoadingComplete={() => setIsLoading(false)} />;
     }
 
   const handleCopy = () => {
