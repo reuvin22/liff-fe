@@ -1,58 +1,55 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
-const Loading = ({ isDone }) => {
-    const [ads, setAds] = useState({});
-    const [newAd, setNewAd] = useState(null);
+const Loading = ({ isDone, onLoadingComplete }) => {
+    const [ads, setAds] = useState(null);
     const [isWaiting, setIsWaiting] = useState(false);
+    const [counter, setCounter] = useState(15); // Countdown timer before next API fetch
+    const timeoutRef = useRef(null);
+    const intervalRef = useRef(null);
+
+    const fetchAds = async () => {
+        if (isWaiting) return; // Prevent duplicate requests
+
+        console.log("Fetching new ad in 3...2...1..."); // Logs before fetching
+        try {
+            const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
+            console.log("Fetched Ads Data:", response.data);
+
+            setAds(response.data);
+            setIsWaiting(true);
+            setCounter(15); // Reset counter after fetching
+
+            timeoutRef.current = setTimeout(() => {
+                setIsWaiting(false);
+                if (isDone) {
+                    onLoadingComplete(); // Only exit after ad has finished
+                }
+            }, 15000);
+        } catch (error) {
+            console.error("Error fetching ads:", error);
+        }
+    };
 
     useEffect(() => {
-        let interval;
+        fetchAds(); // Initial fetch
 
-        const fetchAds = async () => {
-            try {
-                const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files")
-                console.log("Fetched Ads Data:", response.data);
-
-                if (!isWaiting) {
-                    setAds(response.data);
-                    setIsWaiting(true);
-
-                    setTimeout(() => {
-                        setIsWaiting(false);
-                    }, 15000);
-                } else {
-                    setNewAd(response.data);
+        intervalRef.current = setInterval(() => {
+            setCounter((prev) => {
+                console.log(`Next API fetch in: ${prev} seconds`);
+                if (prev <= 1) {
+                    fetchAds(); // Fetch when countdown reaches 0
+                    return 15;
                 }
-            } catch (error) {
-                console.error("Error fetching ads:", error);
-            }
-        };
-
-        if (!isDone) {
-            fetchAds();
-
-            interval = setInterval(() => {
-                fetchAds();
-            }, 15000);
-        }
+                return prev - 1;
+            });
+        }, 1000); // Countdown updates every second
 
         return () => {
-            clearInterval(interval);
+            clearInterval(intervalRef.current);
+            clearTimeout(timeoutRef.current);
         };
-    }, [isDone]);
-
-    useEffect(() => {
-        if (!isWaiting && newAd) {
-            setAds(newAd);
-            setNewAd(null);
-            setIsWaiting(true);
-
-            setTimeout(() => {
-                setIsWaiting(false);
-            }, 15000);
-        }
-    }, [isWaiting, newAd]);
+    }, []);
 
     return (
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
@@ -60,8 +57,11 @@ const Loading = ({ isDone }) => {
                 <div className="border-2 border-black mt-1 bg-gray-300 mb-2">
                     文章の作成が完了しました
                 </div>
+                <p className="text-sm font-medium text-gray-700">
+                    Next ad fetch in: {counter} seconds
+                </p>
                 <div className="min-h-72 border-2 border-black bg-white mb-2 overflow-auto overflow-x-hidden">
-                    {ads.url ? (
+                    {ads?.url ? (
                         ads.mime_type && ads.mime_type.includes("image") ? (
                             <img
                                 src={ads.url}
