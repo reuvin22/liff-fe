@@ -1,90 +1,70 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAdsContext } from "../utils/context";
 
 const Loading = ({ generate }) => {
-    const [ads, setAds] = useState(null);
+    const [ads, setAds] = useState({});
+    const [newAd, setNewAd] = useState(null);
     const [isWaiting, setIsWaiting] = useState(false);
-    const [counter, setCounter] = useState(15);
-    const timeoutRef = useRef(null);
-    const intervalRef = useRef(null);
     const context = useAdsContext();
-    const [end, setEnd] = useState(false)
-    const fetchAds = async () => {
-        if (isWaiting) return;
-    
-        console.log("🚀 Fetching new ad...");
-        try {
-            const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
-            console.log("✅ Fetched Ads Data:", response.data);
-    
-            setAds(response.data);
-            setIsWaiting(true);
-            setCounter(15);
-            context.setIsLoading(true);
-    
-            console.log("⏳ Playing ad for 15 seconds...");
-    
-            let adPlayTime = 15000;
-            let generateReceived = false;
-    
-            timeoutRef.current = setTimeout(() => {
-                setIsWaiting(false);
-                console.log("🕒 15s finished, checking generate...");
-    
-                if (generate) {
-                    console.log("📢 `generate` has content! Ensuring full 15s playback before setting `isLoading = false`...");
-                    generateReceived = true;
-                } else {
-                    console.log("❌ `generate` is empty. Setting `isDone = true`...");
-                }
-    
-                setTimeout(() => {
-                    console.log("🛑 15s ended! Now setting `isDone = false` and `isLoading = false`.");
-
-                    console.log("🔹 Context (After 15s):", { isLoading: context.isLoading });
-                }, adPlayTime);
-                
-                setEnd(true)
-            }, adPlayTime);
-    
-        } catch (error) {
-            console.error("❌ Error fetching ads:", error);
-        }
-    };    
+    const [apiResponded, setApiResponded] = useState(false); // Track if the API has responded at least once.
 
     useEffect(() => {
-        fetchAds();
+        let timeoutRef;
+        let apiTimeout;
 
-        intervalRef.current = setInterval(() => {
-            setCounter((prev) => {
-                console.log(`⏳ Countdown: ${prev} seconds remaining`);
-                if (prev <= 1) {
-                    fetchAds();
-                    return 15;
+        const fetchAds = async () => {
+            try {
+                const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
+                console.log("Fetched Ads Data:", response.data);
+                setApiResponded(true); // Set to true upon receiving the first response.
+                setAds(response.data);
+                setNewAd(response.data) // Store the new Ad in newAd.
+            } catch (error) {
+                console.error("Error fetching ads:", error);
+            }
+        };
+
+        // If generate has data
+        if (generate) {
+            // Set a timeout to set isLoading to false if the API doesn't respond within 15 seconds.
+            apiTimeout = setTimeout(() => {
+                if (!apiResponded) {
+                    console.log("API didn't respond in 15 seconds. Setting isLoading to false.");
+                    context.setIsLoading(false); // Set isLoading to false in the context
                 }
-                return prev - 1;
-            });
-        }, 1000);
+            }, 15000);
+
+            fetchAds();
+        } else {
+            // If generate doesn't have data, immediately set isLoading to false
+            context.setIsLoading(false);
+        }
 
         return () => {
-            console.log("🧹 Cleaning up timeouts and intervals...");
-            clearInterval(intervalRef.current);
-            clearTimeout(timeoutRef.current);
+            clearTimeout(timeoutRef);
+            clearTimeout(apiTimeout);
         };
-    }, []);
+    }, [generate, context]); // Add context to the dependency array
+
+    useEffect(() => {
+        if (newAd) {
+          const timeoutId = setTimeout(() => {
+            context.setIsLoading(false);
+          }, 15000);
+
+          return () => clearTimeout(timeoutId); // Cleanup the timeout if the component unmounts
+        }
+      }, [newAd, context]);
 
     return (
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
             <div className="bg-white w-80 rounded-lg shadow-lg p-4 text-center">
                 <div className="border-2 border-black mt-1 bg-gray-300 mb-2">
-                    {context.isDone ? "文章の作成が完了しました" : "Loading new ad..."}
+                    文章の作成が完了しました
                 </div>
-                <p className="text-sm font-medium text-gray-700">
-                    Next ad fetch in: {counter} seconds
-                </p>
                 <div className="min-h-72 border-2 border-black bg-white mb-2 overflow-auto overflow-x-hidden">
-                    {ads?.url ? (
+                    {ads.url ? (
                         ads.mime_type && ads.mime_type.includes("image") ? (
                             <img
                                 src={ads.url}
