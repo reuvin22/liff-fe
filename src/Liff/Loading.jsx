@@ -7,23 +7,20 @@ const Loading = ({ isDone }) => {
     const [isWaiting, setIsWaiting] = useState(false);
 
     useEffect(() => {
-        let interval;
-        let timeoutRef;
+        let intervalId;
+        let timeoutId;
 
         const fetchAds = async () => {
             try {
-                const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files")
+                const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
                 console.log("Fetched Ads Data:", response.data);
-                if (!isWaiting) {
-                    setAds(response.data);
-                    setIsWaiting(true);
 
-                    timeoutRef = setTimeout(() => {
-                        setIsWaiting(false);
-                    }, 15000);
-                } else {
-                    setNewAd(response.data);
-                }
+                setAds(response.data);
+                setIsWaiting(true);
+
+                timeoutId = setTimeout(() => {
+                    setIsWaiting(false);
+                }, 15000);
             } catch (error) {
                 console.error("Error fetching ads:", error);
             }
@@ -31,29 +28,18 @@ const Loading = ({ isDone }) => {
 
         if (!isDone) {
             fetchAds();
-
-            interval = setInterval(() => {
-                fetchAds();
+            intervalId = setInterval(() => {
+                if (!isWaiting) {
+                    fetchAds();
+                }
             }, 15000);
         }
 
         return () => {
-            clearInterval(interval);
-            clearTimeout(timeoutRef);
+            clearInterval(intervalId);
+            clearTimeout(timeoutId);
         };
-    }, [isDone]);
-
-    useEffect(() => {
-        if (!isWaiting && newAd) {
-            setAds(newAd);
-            setNewAd(null);
-            setIsWaiting(true);
-
-            setTimeout(() => {
-                setIsWaiting(false);
-            }, 15000);
-        }
-    }, [isWaiting, newAd]);
+    }, [isDone, isWaiting]);
 
     return (
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
@@ -78,7 +64,7 @@ const Loading = ({ isDone }) => {
                             ></iframe>
                         )
                     ) : (
-                        <p>Please wait....</p>
+                        <p>お待ちください....</p>
                     )}
                 </div>
             </div>
