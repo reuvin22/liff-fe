@@ -3,7 +3,6 @@ import axios from "axios";
 
 const Loading = ({ isDone }) => {
     const [ads, setAds] = useState({});
-    const [newAd, setNewAd] = useState(null);
     const [isWaiting, setIsWaiting] = useState(false);
 
     useEffect(() => {
@@ -11,27 +10,29 @@ const Loading = ({ isDone }) => {
         let timeoutId;
 
         const fetchAds = async () => {
+            if (isWaiting) return;
+
             try {
+                setIsWaiting(true);
                 const response = await axios.get("https://reuvindevs.com/liff/public/api/firebase-files");
                 console.log("Fetched Ads Data:", response.data);
-
                 setAds(response.data);
-                setIsWaiting(true);
 
                 timeoutId = setTimeout(() => {
                     setIsWaiting(false);
                 }, 15000);
             } catch (error) {
                 console.error("Error fetching ads:", error);
+                setIsWaiting(false);
             }
         };
 
-        if (!isDone) {
+        if (isDone) {
+            fetchAds();
+        } else {
             fetchAds();
             intervalId = setInterval(() => {
-                if (!isWaiting) {
-                    fetchAds();
-                }
+                fetchAds();
             }, 15000);
         }
 
@@ -39,7 +40,7 @@ const Loading = ({ isDone }) => {
             clearInterval(intervalId);
             clearTimeout(timeoutId);
         };
-    }, [isDone, isWaiting]);
+    }, [isDone]);
 
     return (
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
