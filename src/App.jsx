@@ -8,7 +8,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   console.log('APP.jsx isDone value = ', isDone);
   console.log('APP.jsx isDone Loading = ', isLoading);
-  ///test
   return (
     <>
       <AdsContext.Provider value={{ isDone, setIsDone, isLoading, setIsLoading }}>
