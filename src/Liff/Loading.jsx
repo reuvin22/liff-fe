@@ -7,7 +7,7 @@ const Loading = ({ generate }) => {
     const [ads, setAds] = useState(null);
     const [newAd, setNewAd] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [countdown, setCountdown] = useState(15); // Countdown timer state
+    const [countdown, setCountdown] = useState(15); // Countdown timer
 
     useEffect(() => {
         let timeoutRef;
@@ -101,7 +101,9 @@ const Loading = ({ generate }) => {
                         <p>Please wait....</p>
                     )}
                 </div>
-                <div className="text-gray-600 mt-2">Ad will finish in {countdown} seconds...</div>
+                <div className="text-gray-600 mt-2">
+                    Ad will finish in {countdown} seconds...
+                </div>
             </div>
         </div>
     );
