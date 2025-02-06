@@ -6,12 +6,12 @@ function App() {
   const [isDone, setIsDone] = useState(false);
   return (
     <>
-      <Routes>
-        <AdsContext.Provider value={{ isDone, setIsDone }}>
-          <Route path="/" element={<Home />} />
-        </AdsContext.Provider>
-        <Route path='/explanation' element={<Carousel />} />
-      </Routes>
+      <AdsContext.Provider value={{ isDone, setIsDone }}>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path='/explanation' element={<Carousel />} />
+        </Routes>
+      </AdsContext.Provider>
     </>
   )
 }
