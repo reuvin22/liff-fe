@@ -18,11 +18,6 @@ function Generate({prompt, userId}) {
     const context = useAdsContext()
     const handleCompress = () => {
         context.setIsLoading(true)
-
-        const timeout = setTimeout(() => {
-            timeoutFlag = true;
-        }, 6000);
-
         axios.get(
             `https://reuvindevs.com/liff/public/api/compress/${userId}`
         ).then((response) => {
@@ -37,7 +32,6 @@ function Generate({prompt, userId}) {
                 userId={userId}
             />
         });
-        clearTimeout(timeout)
     }
     
     const handleGenerate = () => {
@@ -55,13 +49,13 @@ function Generate({prompt, userId}) {
         });
     }
 
-    if(context.isReady === true){
+    if(isCompress){
         return <Compress 
             prompt={compressData}
             userId = {userId}
         />
     }
-    if(context.isLoading){
+    if(isLoading){
         return <Loading />;
     }
 
