@@ -8,7 +8,6 @@ const Loading = ({ isDone }) => {
 
     useEffect(() => {
         let interval;
-        let timeoutRef;
 
         const fetchAds = async () => {
             try {
@@ -19,7 +18,7 @@ const Loading = ({ isDone }) => {
                     setAds(response.data);
                     setIsWaiting(true);
 
-                    timeoutRef = setTimeout(() => {
+                    setTimeout(() => {
                         setIsWaiting(false);
                     }, 15000);
                 } else {
@@ -40,7 +39,6 @@ const Loading = ({ isDone }) => {
 
         return () => {
             clearInterval(interval);
-            clearTimeout(timeoutRef);
         };
     }, [isDone]);
 
