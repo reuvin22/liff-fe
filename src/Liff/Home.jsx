@@ -11,7 +11,7 @@ import { useAdsContext } from "../utils/context";
 const Home = () => {
     const [progress, setProgress] = useState(1);
     const [currentStep, setCurrentStep] = useState(1);
-    const [totalSteps] = useState(14);
+    const [totalSteps] = useState(13);
     const [isGenerate, setIsGenerate] = useState(false)
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [showAdditionalDiv, setShowAdditionalDiv] = useState(false);
@@ -33,7 +33,7 @@ const Home = () => {
       : 200;
     const [formData, setFormData] = useState({
         userId: null,
-        displayName: '',
+        displayName: 'Reuvin',
         Question_1: '',
         Ability_Desc_1: '',
         Question_2: '',
@@ -49,9 +49,8 @@ const Home = () => {
         Question_11: '',
         Question_12: '',
         Question_13: '',
-        Question_14: ''
     });
-    const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState('12321321321');
 
     const options = [
         "FP知識",
@@ -192,8 +191,7 @@ const Home = () => {
         "志望している企業のＴＯＰページのアドレスを入力してください。",
         `志望企業の「ミッションや理念」をホームページから探してきて記入してください。`,
         `あなたが魅力を感じる「企業理念・ビジョン・ミッション」「事業内容」「具体的な仕事内容」を記載してください。`,
-        `なぜその会社に魅力を感じるのか、自分自身の経験やその中で感じたこと、考えたことも含めて説明してください。`,
-        `2の理由と1の内容に整合性がない場合は、感情や考えを想定して理由だけを作成してください`
+        `なぜその会社に魅力を感じるのか、自分自身の経験やその中で感じたこと、考えたことも含めて説明してください。`
     ];
 
     useEffect(() => {
@@ -366,7 +364,7 @@ const Home = () => {
             return;
         }
 
-        if(progress === 14){
+        if(progress === 13){
             handleSubmit()
             return;
         }
@@ -573,7 +571,7 @@ const Home = () => {
                 </div>
             </div>
             )}
-           {(progress === 12 || progress === 13 || progress === 14) && (
+           {(progress === 12 || progress === 13) && (
               <div className="relative bg-white p-4 max-w-sm mx-auto">
                   <div className="-mt-6">
                       <textarea
