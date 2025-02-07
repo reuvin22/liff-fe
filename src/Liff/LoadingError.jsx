@@ -47,7 +47,7 @@ function LoadingError({userId}) {
         />
     }
     if(isLoading){
-        return <Loading />
+        return <Loading generate={generate ? generate : compressData}/>
     }
 
   return (

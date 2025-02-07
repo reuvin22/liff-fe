@@ -51,7 +51,7 @@ const Home = () => {
         Question_13: '',
         Question_14: ''
     });
-    const [userId, setUserId] = useState(null);
+    const [userId, setUserId] = useState('12321321321');
 
     const options = [
         "FP知識",
@@ -283,12 +283,6 @@ const Home = () => {
       console.log(formData);
       context.setIsLoading(true);
   
-      let timeoutFlag = false;
-  
-      const timeout = setTimeout(() => {
-          timeoutFlag = true;
-      }, 6000);
-  
       try {
         const postResponse = await axios.post(
             "https://reuvindevs.com/liff/public/api/answers",
@@ -299,8 +293,6 @@ const Home = () => {
                 },
             }
         );
-  
-          clearTimeout(timeout);
   
           if (
               postResponse.data.openai === "申し訳ありませんが、そのリクエストには対応できません。" ||
@@ -316,6 +308,7 @@ const Home = () => {
       } catch (error) {
           console.error("Error during submission or fetching prompt:", error);
           alert("An error occurred while processing your request.");
+          <LoadingError />
       }
   };
     

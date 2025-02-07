@@ -19,11 +19,7 @@ const Loading = ({ generate }) => {
             setAdPlaying(true);
             setCountdown(15);
 
-            intervalRef.current = setInterval(() => {
-                setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
-            }, 1000);
-
-            timeoutRef.current = setTimeout(() => {
+            setTimeout(() => {
                 console.log("🕒 15s ad playtime completed.");
 
                 if (generate) {
@@ -33,7 +29,6 @@ const Loading = ({ generate }) => {
                 }
 
                 setAdPlaying(false);
-                clearInterval(intervalRef.current);
             }, 15000);
         } catch (error) {
             console.error("❌ Error fetching ads:", error);
@@ -41,21 +36,23 @@ const Loading = ({ generate }) => {
     };
 
     useEffect(() => {
-        fetchAds();
-
+        const initialFetchTimeout = setTimeout(() => {
+            fetchAds();
+        }, 6000);
+    
         const adInterval = setInterval(() => {
             if (!generate) {
                 fetchAds();
             }
         }, 15000);
-
+    
         return () => {
             console.log("🧹 Cleaning up timeouts and intervals...");
-            clearTimeout(timeoutRef.current);
-            clearInterval(intervalRef.current);
+            clearTimeout(initialFetchTimeout);
             clearInterval(adInterval);
         };
     }, [generate]);
+    
 
     return (
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">

@@ -6,7 +6,15 @@ export const AdsContext = createContext({
     isLoading: false,
     setIsLoading: () => {},
     isReady: false,
-    setIsReady: () => {}
+    setIsReady: () => {},
+    isCompressReady: false,
+    setIsCompressReady: () => {}
 });
 
+export const GenerateContext = createContext({
+    prompt: '',
+    setPrompt: () => {}  
+})
+
 export const useAdsContext = () => useContext(AdsContext);
+export const useGenerateContext = () => useContext(GenerateContext)

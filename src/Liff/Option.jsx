@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import Generate from './Generate';
 import { useNavigate } from 'react-router-dom';
+import { useAdsContext } from '../utils/context';
 
 function Option({ prompt, userId }) {
   const [isGenerate, setIsGenerate] = useState(false);
-  const navigate = useNavigate();
+  const context = useAdsContext()
 
   const handleGenerate = () => {
     if (!prompt) {
       console.log('PROMPT IS EMPTY');
     } else {
       setIsGenerate(true);
+      context.setIsLoading(false)
     }
   };
 

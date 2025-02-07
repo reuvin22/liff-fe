@@ -4,17 +4,14 @@ import Loading from './Loading';
 import Generate from './Generate';
 import LoadingError from './LoadingError';
 import liff from '@line/liff';
+import { useAdsContext } from '../utils/context';
 function Compress({prompt, userId}) {
     const [copyStatus, setCopyStatus] = useState("");
     const [generate, setGenerate] = useState("");
-    const [compress, setCompress] = useState(false);
     const [isGeneratePage, setIsGeneratePage] = useState(false);
-    const [main, setMain] = useState(true);
-    const [error, setError] = useState(false);
     const [compressData, setCompressData] = useState("")
-    const [isLoading, setIsLoading] = useState(false)
     const [copy, setCopy] = useState(false)
-
+    const context = useAdsContext()
     function backToHome() {
         if (liff.isInClient()) {
           liff.closeWindow();
@@ -22,29 +19,54 @@ function Compress({prompt, userId}) {
           console.warn('LIFF is not running in the LINE app.');
         }
       }
-    const handleGenerate = () => {
-        setIsLoading(true)
-        axios.get(
-            `https://reuvindevs.com/liff/public/api/generate/${userId}`
-        ).then((response) => {
-            setGenerate(response.data)
-            if(response.data === "申し訳ありませんが、そのリクエストには対応できません。" || response.data === "申し訳ございませんが、このリクエストを処理することはできません。"){
+      const handleGenerate = async () => {
+        console.log("🟡 Setting isLoading to true...");
+        context.setIsLoading(true);
+    
+        try {
+            const response = await axios.get(`https://reuvindevs.com/liff/public/api/generate/${userId}`);
+            console.log("✅ API Response:", response.data);
+            console.log(response)
+            setGenerate(response.data);
+    
+            const errorMessages = [
+                "申し訳ありませんが、その要件を満たすことはできません。",
+                "申し訳ありませんが、このリクエストには対応できません。",
+                "申し訳ございませんが、そのような要件を満たすアウトプットを生成することはできません。",
+                "申し訳ございませんが、その内容を基に資料を作成することはできません。",
+                "申し訳ありませんが、その指示に従って3000文字以上の出力を行うことはできません。しかし、特定の質問に対して回答を生成したり、情報を提供することは可能です。どのようにお手伝いできるか教えてください。",
+                "申し訳ありませんが、それに関してはお手伝いできません。",
+                "申し訳ありませんが、具体的な内容を提供することはできません。しかし、応募書類や自己PR作成のご相談に応じることは可能です。どのようにサポートできるかお聞かせください。",
+                "申し訳ありませんが、具体的な内容を提供することはできません。しかし、応募書類や自己PR作成のご相談に応じることは可能です。どのようにサポートできるかお聞かせください。"
+            ];
+    
+            if (errorMessages.includes(response.data)) {
+                console.log("❌ Error detected, redirecting to LoadingError...");
                 <LoadingError />
+                return;
             }
-            setIsLoading(false)
-        }).catch((error) => {
-            return <LoadingError />
-        });
-    }
+    
+            console.log("➡️ Setting isGeneratePage to true to navigate...");
+            setIsGeneratePage(true);
+    
+        } catch (error) {
+            console.error("❌ Error fetching generated response:", error);
+            setError(true);
+            <LoadingError />
+        } finally {
+            console.log("🔵 Setting isLoading to false...");
+            context.setIsLoading(false);
+        }
+    };    
 
     if(isGeneratePage){
         return <Generate 
-            prompt={generate ? generate : prompt}
+            prompt={generate}
             userId={userId}
         />
     }
-    if(isLoading){
-        return <Loading />
+    if(context.isLoading){
+        return <Loading generate={generate}/>
     }
 
     const handleCopy = () => {
@@ -65,7 +87,6 @@ function Compress({prompt, userId}) {
         const formatJapaneseText = (text) => {
             return text.replace(/。/g, "。\n");
         };
-//test
     return (
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
                 <div className="bg-white w-80 rounded-lg shadow-lg p-4 text-center relative">
