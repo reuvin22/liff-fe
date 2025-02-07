@@ -51,7 +51,7 @@ const Home = () => {
         Question_13: '',
         Question_14: ''
     });
-    const [userId, setUserId] = useState('12321321321');
+    const [userId, setUserId] = useState('');
 
     const options = [
         "FP知識",
