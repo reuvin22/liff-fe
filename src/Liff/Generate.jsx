@@ -140,18 +140,18 @@ function Generate({prompt, userId}) {
                 </div>
                 <div className="flex space-x-2">
                 <button onClick={handleCompress} className="bg-orange-400 text-white px-4 border flex-1 text-sm">
-                    文字に圧縮する
+                    400文字に圧縮
                 </button>
                 <button onClick={handleGenerate} className="bg-green-400 text-white px-4 border flex-1 text-sm">
-                    再度生成する
+                    再生成
                 </button>
                 <button onClick={handleCopy} className="bg-yellow-400 text-white px-4 border flex-1 text-sm">
-                    貼り付け板に複製する
+                    クリップボードにコピー
                 </button>
                 </div>
                 <div onClick={backToHome} className='border-1 border-black mt-1 bg-gray-300'>
                     <button className='py-2'>
-                        ホームに戻る
+                        ホーム
                     </button>
                 </div>
             </div>

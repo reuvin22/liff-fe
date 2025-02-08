@@ -7,8 +7,6 @@ const Loading = ({ generate }) => {
     const [countdown, setCountdown] = useState(15);
     const [adPlaying, setAdPlaying] = useState(false);
     const context = useAdsContext();
-    const timeoutRef = useRef(null);
-    const intervalRef = useRef(null);
 
     const fetchAds = async () => {
         console.log("🚀 Fetching new ad...");
@@ -29,7 +27,7 @@ const Loading = ({ generate }) => {
                 }
 
                 setAdPlaying(false);
-            }, 15000);
+            }, 17000);
         } catch (error) {
             console.error("❌ Error fetching ads:", error);
         }
@@ -38,13 +36,13 @@ const Loading = ({ generate }) => {
     useEffect(() => {
         const initialFetchTimeout = setTimeout(() => {
             fetchAds();
-        }, 6000);
+        }, 5000);
     
         const adInterval = setInterval(() => {
             if (!generate) {
                 fetchAds();
             }
-        }, 15000);
+        }, 17000);
     
         return () => {
             console.log("🧹 Cleaning up timeouts and intervals...");
@@ -58,7 +56,7 @@ const Loading = ({ generate }) => {
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
             <div className="bg-white w-80 rounded-lg shadow-lg p-4 text-center">
                 <div className="border-2 border-black mt-1 bg-gray-300 mb-2">
-                    作成が完了しました
+                    文章作成中です
                 </div>
 
                 <div className="min-h-72 border-2 border-black bg-white mb-2 overflow-auto overflow-x-hidden">
