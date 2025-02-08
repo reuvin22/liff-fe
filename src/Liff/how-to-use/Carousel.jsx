@@ -71,37 +71,37 @@ const slides = [
 const slide = [
   { text: "ステップ 1 メニュー", image: OperationalA, alt: "Slide 1" },
   {
-    text: "ステップ2ガクチカ/シボドウ/自己PR 生成",
+    text: "ステップ2ガクチカ/志望動機/自己PR 生成",
     image: OperationalB,
     alt: "Slide 2",
   },
   {
-    text: "ステップ2ガクチカ/シボドウ/自己PR 生成",
+    text: "ステップ2ガクチカ/志望動機/自己PR 生成",
     image: OperationalC,
     alt: "Slide 3",
   },
   {
-    text: "ステップ2ガクチカ/シボドウ/自己PR 生成",
+    text: "ステップ2ガクチカ/志望動機/自己PR 生成",
     image: OperationalD,
     alt: "Slide 4",
   },
   {
-    text: "ステップ2ガクチカ/シボドウ/自己PR 生成",
+    text: "ステップ2ガクチカ/志望動機/自己PR 生成",
     image: OperationalE,
     alt: "Slide 5",
   },
   {
-    text: "ステップ2ガクチカ/シボドウ/自己PR 生成",
+    text: "ステップ2ガクチカ/志望動機/自己PR 生成",
     image: OperationalF,
     alt: "Slide 6",
   },
   {
-    text: "ステップ2ガクチカ/シボドウ/自己PR 生成",
+    text: "ステップ2ガクチカ/志望動機/自己PR 生成",
     image: OperationalG,
     alt: "Slide 7",
   },
   {
-    text: "ステップ2ガクチカ/シボドウ/自己PR 生成",
+    text: "ステップ2ガクチカ/志望動機/自己PR 生成",
     image: OperationalH,
     alt: "Slide 8",
   },
@@ -121,12 +121,12 @@ const slide = [
     alt: "Slide 11",
   },
   {
-    text: "別の文章編集器で開く",
+    text: "ブラウザで開く",
     image: OperationalL,
     alt: "Slide 12",
   },
   {
-    text: "文本生成エラー",
+    text: "文章生成エラー",
     image: OperationalM,
     alt: "Slide 13",
   },
