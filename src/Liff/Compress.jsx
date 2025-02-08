@@ -104,13 +104,13 @@ function Compress({prompt, userId}) {
                 </div>
                 <div className="flex space-x-2">
                 <button onClick={backToHome} className="bg-gray-400 text-white px-4 border flex-1 text-sm">
-                    ホームに戻る
+                    ホーム
                 </button>
                 <button onClick={handleGenerate} className="bg-green-400 text-white px-4 border flex-1 text-sm">
-                    生成する
+                    再生成
                 </button>
                 <button onClick={handleCopy} className="bg-yellow-400 text-white px-4 border flex-1 text-sm">
-                    貼り付け板に複製
+                    クリップボードにコピー
                 </button>
                 </div>
             </div>
