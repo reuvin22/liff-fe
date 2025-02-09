@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import Loading from './Loading';
 import Generate from './Generate';
@@ -12,6 +12,7 @@ function Compress({prompt, userId}) {
     const [compressData, setCompressData] = useState("")
     const [copy, setCopy] = useState(false)
     const context = useAdsContext()
+    const [shouldRenderGenerate, setShouldRenderGenerate] = useState(false)
     function backToHome() {
         if (liff.isInClient()) {
           liff.closeWindow();
@@ -20,13 +21,11 @@ function Compress({prompt, userId}) {
         }
       }
       const handleGenerate = async () => {
-        console.log("🟡 Setting isLoading to true...");
+        context.setIsClicked('Generate')
         context.setIsLoading(true);
     
         try {
             const response = await axios.get(`https://reuvindevs.com/liff/public/api/generate/${userId}`);
-            console.log("✅ API Response:", response.data);
-            console.log(response)
             setGenerate(response.data);
     
             const errorMessages = [
@@ -41,25 +40,25 @@ function Compress({prompt, userId}) {
             ];
     
             if (errorMessages.includes(response.data)) {
-                console.log("❌ Error detected, redirecting to LoadingError...");
                 <LoadingError />
                 return;
             }
-    
-            console.log("➡️ Setting isGeneratePage to true to navigate...");
-            setIsGeneratePage(true);
     
         } catch (error) {
             console.error("❌ Error fetching generated response:", error);
             setError(true);
             <LoadingError />
-        } finally {
-            console.log("🔵 Setting isLoading to false...");
-            context.setIsLoading(false);
-        }
+        } 
     };    
 
-    if(isGeneratePage){
+    useEffect(() => {
+        if (context.generateIsReady === true && context.countdown === 0 && context.isClicked === 'Generate') {
+            setShouldRenderGenerate(true);
+            context.setIsLoading(false)
+        }
+    }, [context.generateIsReady, context.countdown]);
+    
+    if(shouldRenderGenerate){
         return <Generate 
             prompt={generate}
             userId={userId}

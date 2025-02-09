@@ -7,11 +7,15 @@ function App() {
   const [isDone, setIsDone] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  console.log('APP.jsx isDone value = ', isDone);
-  console.log('APP.jsx isDone Loading = ', isLoading);
+  const [adsPlaying, setAdsPlaying] = useState(false);
+  const [isClicked, setIsClicked] = useState('')
+  const [countdown, setCountdown] = useState(15)
+  const [countInterval, setCountInterval] = useState(null)
+  const [generateIsReady, setGenerateIsReady] = useState(false)
+  const [compressIsReady, setCompressIsReady] = useState(false)
   return (
     <>
-      <AdsContext.Provider value={{ isDone, setIsDone, isLoading, setIsLoading, isReady, setIsReady }}>
+      <AdsContext.Provider value={{ isDone, setIsDone, isLoading, setIsLoading, isReady, setIsReady, adsPlaying, setAdsPlaying, isClicked, setIsClicked, countdown, setCountdown, countInterval, setCountInterval, generateIsReady, setGenerateIsReady, compressIsReady, setCompressIsReady }}>
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path='/explanation' element={<Carousel />} />
