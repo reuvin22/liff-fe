@@ -63,6 +63,7 @@ const Loading = ({ generate, prompt }) => {
         }
     }, [context.countdown, generate, prompt])
 
+    console.log(context.countdown)
     return (
         <div className="min-h-screen bg-blue-100 flex justify-center items-center">
             <div className="bg-white w-80 rounded-lg shadow-lg p-4 text-center">
