@@ -329,18 +329,23 @@ const Home = () => {
     }
 
     const handleOptionClick = (value) => {
-      const abilityDescriptionIndex = options.indexOf(value);
+      const trimmedValue = value.trim(); // Remove extra spaces
+      const abilityDescriptionIndex = options.findIndex(opt => opt.trim() === trimmedValue); // More robust lookup
   
-      setSelectedOption(value);
+      console.log("Selected Option:", trimmedValue);
+      console.log("Found Index:", abilityDescriptionIndex);
+      console.log("Retrieved Description:", showAdditionalInfo[abilityDescriptionIndex]);
+  
+      setSelectedOption(trimmedValue);
       setDropdownOpen(false);
       setShowAdditionalDiv(true);
-      
+  
       setFormData((prevData) => ({
           ...prevData,
-          [`Question_${progress}`]: value,
-          [`Ability_Desc_${progress}`]: showAdditionalInfo?.[abilityDescriptionIndex] || "",
+          [`Question_${progress}`]: trimmedValue,
+          [`Ability_Desc_${progress}`]: showAdditionalInfo?.[abilityDescriptionIndex] || "説明が見つかりません",
       }));
-    };
+  };  
   
       const handleInputLimit = (event) => {
         const inputValue = event.target.value.slice(0, maxInput);
