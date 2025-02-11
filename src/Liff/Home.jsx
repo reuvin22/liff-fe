@@ -248,7 +248,7 @@ const Home = () => {
                       });
                   } else {
                     alert("ユーザーがログインしていません。ユーザー ID が検出されません。");
-                    // liff.login();
+                    liff.login();
                   }
                 })
                 .catch((err) => {
@@ -329,12 +329,10 @@ const Home = () => {
     }
 
     const handleOptionClick = (value) => {
-      const trimmedValue = value.trim(); // Remove extra spaces
-      const abilityDescriptionIndex = options.findIndex(opt => opt.trim() === trimmedValue); // More robust lookup
+      const trimmedValue = value.trim();
+      const abilityDescriptionIndex = options.findIndex(opt => opt.trim() === trimmedValue);
   
-      console.log("Selected Option:", trimmedValue);
-      console.log("Found Index:", abilityDescriptionIndex);
-      console.log("Retrieved Description:", showAdditionalInfo[abilityDescriptionIndex]);
+      console.log('option index: ', selectedOption)
   
       setSelectedOption(trimmedValue);
       setDropdownOpen(false);
