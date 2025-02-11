@@ -15,7 +15,7 @@ const Home = () => {
     const [isGenerate, setIsGenerate] = useState(false)
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [showAdditionalDiv, setShowAdditionalDiv] = useState(false);
-    const [selectedOption, setSelectedOption] = useState("");
+    const [selectedOption, setSelectedOption] = useState(null);
     const [currentInput, setCurrentInput] = useState("");
     const [showAdvice, setShowAdvice] = useState(false);
     const [optionComponent, setOptionComponent] = useState(false)
@@ -248,7 +248,7 @@ const Home = () => {
                       });
                   } else {
                     alert("ユーザーがログインしていません。ユーザー ID が検出されません。");
-                    liff.login();
+                    // liff.login();
                   }
                 })
                 .catch((err) => {
