@@ -300,7 +300,7 @@ const Home = () => {
               postResponse.data.openai === "申し訳ありませんが、そのリクエストには対応できません。" ||
               postResponse.data.openai === "申し訳ございませんが、このリクエストを処理することはできません。"
           ) {
-              setHasError(true);
+              <LoadingError userId={userId}/>
           }
           if (postResponse.status === 200) {
               setPrompt(postResponse.data.openai);
@@ -310,7 +310,7 @@ const Home = () => {
       } catch (error) {
           console.error("Error during submission or fetching prompt:", error);
           alert("An error occurred while processing your request.");
-          <LoadingError />
+          <LoadingError userId={userId}/>
       }
   };
     
