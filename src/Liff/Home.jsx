@@ -247,7 +247,8 @@ const Home = () => {
                         alert("Error fetching user profile. Please try again.");
                       });
                   } else {
-                    alert("ユーザーがログインしていません。ユーザー ID が検出されません。");
+                    alert(`LINEログインが必要です。
+                      この後に表示されるユーザー検証を行ってください`);                      
                     liff.login();
                   }
                 })
