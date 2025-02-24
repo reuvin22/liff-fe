@@ -18,7 +18,22 @@ function Option({ prompt, userId }) {
 
   const handleDownloadRedirect = async () => {
     const downloadUrl = `https://reuvindevs.com/liff/public/api/convert/${userId}`;
-
+  
+    try {
+      // Check the URL status with a HEAD request
+      const response = await fetch(downloadUrl, { method: 'HEAD' });
+      if (response.status === 403) {
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        // link.download = 'downloadedFile.ext';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch (error) {
+      console.error('Error checking download URL status:', error);
+    }
+  
     if (window.liff) {
       try {
         await window.liff.sendMessages([
@@ -27,13 +42,12 @@ function Option({ prompt, userId }) {
             text: `ダウンロードリンク: ${downloadUrl}`,
           },
         ]);
-        
         window.liff.closeWindow();
       } catch (error) {
-        console.error('Error sending message:', error);
+        console.error('Error sending LIFF message:', error);
       }
     }
-  };
+  };  
 
   if (isGenerate) {
     return <Generate prompt={prompt} userId={userId} />;
