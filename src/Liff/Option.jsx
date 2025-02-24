@@ -19,6 +19,7 @@ function Option({ prompt, userId }) {
   const handleDownloadRedirect = async () => {
     const downloadUrl = `https://reuvindevs.com/liff/public/api/convert/${userId}`;
   
+    // If LIFF is available, try sending a message
     if (window.liff) {
       try {
         await window.liff.sendMessages([
@@ -27,19 +28,25 @@ function Option({ prompt, userId }) {
             text: `ダウンロードリンク: ${downloadUrl}`,
           },
         ]);
+        // Close the LIFF window if the message is sent successfully
         window.liff.closeWindow();
+        return; // Stop further execution if LIFF operation was successful
       } catch (error) {
-        console.error('Error sending LIFF message:', error);
+        console.error(
+          'Error sending LIFF message, falling back to browser download:',
+          error
+        );
       }
-    } else {
-        await axios.post(downloadUrl, { method: 'HEAD' });
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        // link.download = 'downloadedFile.ext';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     }
+  
+    // Fallback: Trigger a file download in a PC browser
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    // Optionally, you can set a filename:
+    // link.download = 'downloadedFile.ext';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };  
 
   if (isGenerate) {
