@@ -148,7 +148,7 @@ function Generate({prompt, userId}) {
                 </div>
                 <div className="flex space-x-2">
                 <button onClick={handleCompress} className="bg-orange-400 text-white px-4 border flex-1 text-sm">
-                    400文字に圧縮
+                    エントリーシートの文字数制限に圧縮
                 </button>
                 <button onClick={handleGenerate} className="bg-green-400 text-white px-4 border flex-1 text-sm">
                     再生成
